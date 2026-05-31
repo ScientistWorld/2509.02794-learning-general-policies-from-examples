@@ -122,7 +122,9 @@ def evaluate_policy(policy: dict) -> dict[str, float]:
             plan_ratios.append(ratio)
             max_plan_ratio = max(max_plan_ratio, ratio)
     max_branching, avg_branching = _branching_metrics(large_results + capacity_results)
+    policy_quality = large_coverage - 0.05 * avg_branching
     return {
+        "policy_quality": policy_quality,
         "train_coverage": train_coverage,
         "large_instance_coverage": large_coverage,
         "hard_instance_coverage": hard_coverage,
@@ -156,6 +158,7 @@ def baseline_metrics() -> dict[str, float]:
         "avg_effective_width": 1.0,
         "max_applicable_successors": 1.0,
         "avg_applicable_successors": 1.0,
+        "policy_quality": -0.05,
         "selected_features": 0.0,
         "policy_rules": 1.0,
         "max_plan_length_ratio": 0.0,
@@ -178,6 +181,8 @@ def _discover_policy_paths() -> list[Path]:
 
 def _method_name(path: Path) -> str:
     parent = path.parent.name if path.parent.name else path.stem
+    if parent == "genex_gripper":
+        return "genex_wrapper"
     name = re.sub(r"[^A-Za-z0-9_.-]+", "_", parent).strip("_")
     return name or "policy"
 

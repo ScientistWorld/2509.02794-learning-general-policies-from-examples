@@ -6,4 +6,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Even/odd Gripper split plus held-out capacity-shift cases; 32 train metric values and 32 test metric values across genex_gripper and one_step_imitation. GenEx coverage is 1.0 on both slices, baseline coverage is 0.0 on both, and GenEx avg_applicable_successors shifts mildly from 1.1804 train to 1.1708 test. Caveat: core coverage is saturated for the reproduced method because the symbolic Gripper policy solves this domain; branchiness and compactness remain the improvable constraints."
+notes: "Even/odd Gripper split plus held-out capacity-shift cases; 34 train metric values and 34 test metric values across genex_wrapper and one_step_imitation. Primary policy_quality differs slightly across slices for GenEx (0.9410 train, 0.9415 test), while the shortcut baseline remains -0.05 on both. Coverage is saturated for GenEx because the symbolic Gripper policy solves this domain, so policy_quality ranks agents by solved coverage with an ambiguity penalty."
