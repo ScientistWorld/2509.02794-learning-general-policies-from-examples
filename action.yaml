@@ -1,9 +1,9 @@
-# This iteration submits compute jobs.
-# Once you set action to 'submit', STOP immediately.
+# This iteration is complete.
+# Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: submit
+action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Rerun split evaluators after adding missing zero-coefficient diagnostic fields to the baseline rows."
+notes: "Even/odd Gripper split plus held-out capacity-shift cases; 32 train metric values and 32 test metric values across genex_gripper and one_step_imitation. GenEx coverage is 1.0 on both slices, baseline coverage is 0.0 on both, and GenEx avg_applicable_successors shifts mildly from 1.1804 train to 1.1708 test. Caveat: core coverage is saturated for the reproduced method because the symbolic Gripper policy solves this domain; branchiness and compactness remain the improvable constraints."
