@@ -25,6 +25,9 @@
 
 - Optional next step: add another solved paper domain such as Delivery or Ferry
   to move beyond `core_claim`.
+- The packaged environment is complete for the Gripper core-claim gym: method,
+  evaluation, scoring targets, constraints, and end-to-end scripts are present
+  and validated by the completed compute job.
 
 ## Issues
 
