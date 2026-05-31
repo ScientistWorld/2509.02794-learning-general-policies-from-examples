@@ -6,4 +6,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Even/odd Gripper split plus held-out capacity-shift cases; 34 train metric values and 34 test metric values across genex_wrapper and one_step_imitation. Primary policy_quality differs slightly across slices for GenEx (0.9410 train, 0.9415 test), while the shortcut baseline remains -0.05 on both. Coverage is saturated for GenEx because the symbolic Gripper policy solves this domain, so policy_quality ranks agents by solved coverage with an ambiguity penalty."
+notes: "Audited fresh-clone packaging; download.sh has no external fetches because the Gripper benchmark is generated in tracked code, and data/downloads/.gitkeep is now tracked with a correct ignore rule."
