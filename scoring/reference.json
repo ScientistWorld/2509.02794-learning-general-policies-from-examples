@@ -2,7 +2,7 @@
   "experiments": {
     "gripper_generalization": {
       "description": "Gripper domain policy learning and larger-instance generalization. Paper reports Gripper in Table 1 and large-instance coverage/effective width in Table 3.",
-      "notes": "Paper-reported values are used for large_instance_coverage, train_coverage, effective width, selected_features, policy_rules, feature_pool, wrapper iterations, and hit_constraints. policy_quality and the hard/capacity/branching metrics are gym-specific derived metrics added to make future scoring less gameable; they are computed by eval/ and not claimed as paper-reported numbers.",
+      "notes": "Paper-reported values are used for large_instance_coverage, train_coverage, effective width, selected_features, policy_rules, feature_pool, wrapper iterations, and hit_constraints. policy_quality is a derived gym index anchored at the paper's ideal Gripper result of 100% coverage with effective width 0, then penalized by evaluator-only branching. Other hard/capacity/branching metrics are defined so reproduced scores can be checked for robustness, but no reference values are assigned to them because they are not reported in the paper.",
       "weight": 1.0,
       "primary_metric": "policy_quality",
       "metrics": {
@@ -95,7 +95,7 @@
       "results": {
         "genex_wrapper": {
           "type": "proposed",
-          "policy_quality": 0.94,
+          "policy_quality": 1.0,
           "large_instance_coverage": 1.0,
           "train_coverage": 1.0,
           "max_effective_width": 0.0,

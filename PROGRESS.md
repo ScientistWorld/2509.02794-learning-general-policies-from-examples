@@ -40,14 +40,19 @@
   `scoring/scores.json`: hard-instance coverage, capacity-shift coverage,
   applicable-successor branching, and average plan-length ratio. Local
   validation passed after regenerating the policy and all score files.
+- The default evaluation now includes a runnable one-step imitation baseline
+  from `baseline/`, and `scripts/reproduce.sh` exercises both the baseline and
+  GENEX paths before validation. Local validation passed after this packaging
+  cleanup.
 
 ## Remaining
 
 - The packaged environment is complete for the Gripper core-claim gym: method,
   evaluation, scoring targets, constraints, and end-to-end scripts are present.
-- Optional next step for a future agent: add another solved paper domain such as
-  Delivery or Ferry, or port the benchmark to DLPLAN/TARSKI, to move beyond
-  `core_claim`.
+- Current submitted job is a CPU container smoke test of the cleaned baseline,
+  scoring, and train/test evaluation paths.
+- Optional future work: add another solved paper domain such as Delivery or
+  Ferry, or port the benchmark to DLPLAN/TARSKI.
 
 ## Issues
 
@@ -67,6 +72,9 @@
 - The paper's Gripper feature pool has 6,154 features. This reproduction uses a
   smaller generated pool with the relevant Gripper features and distractors so
   the benchmark is fast and reusable in a CPU test job.
+- The evaluator adds hard-size and capacity-shift checks beyond the paper's
+  Gripper table to make the gym less gameable. These are documented as
+  evaluator-derived robustness checks, not paper-reported reference values.
 - The optional policy simplification from the paper is implemented for this
   policy representation. It removes redundant rule literals while checking that
   the resulting rule set is still stratified.

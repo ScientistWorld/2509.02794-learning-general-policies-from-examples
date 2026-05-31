@@ -18,4 +18,5 @@ set -e
 cd /home/user
 
 mkdir -p tmp
-bash scripts/evaluate.sh --include-baseline --policy outputs/missing_policy.json --output tmp/baseline_scores.json
+python -m baseline.one_step_imitation
+python -m eval.evaluate_gripper --include-baseline --policy outputs/missing_policy.json --output tmp/baseline_scores.json

@@ -15,9 +15,10 @@ within this family of interpretable, feature-based generalized policies.
 
 ## Approach Scope
 
-Scientists may improve how examples are chosen, how compact state features are
-defined, how rules are formed, and how policy validity is checked. The output
-must still be an executable feature-rule policy over the benchmark dynamics.
+Scientists may improve how examples are chosen, how the benchmark-provided
+state features are selected, how rules are formed, and how policy validity is
+checked. The output must still be an executable feature-rule policy over the
+benchmark dynamics and feature names known to `data/gripper.py`.
 
 ## Out of Bounds
 
@@ -25,4 +26,4 @@ must still be an executable feature-rule policy over the benchmark dynamics.
 - Training a neural controller that maps states to actions without feature-rule
   policy structure
 - Memorizing all held-out states or using held-out instances during training
-- Changing the Gripper dynamics, object capacity, or evaluation split
+- Changing the Gripper dynamics, evaluator-defined capacities, or evaluation split

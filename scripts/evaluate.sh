@@ -26,4 +26,4 @@ cd /home/user
 
 mkdir -p scoring
 
-python -m eval.evaluate_gripper "$@"
+python -m eval.evaluate_gripper --include-baseline "$@"

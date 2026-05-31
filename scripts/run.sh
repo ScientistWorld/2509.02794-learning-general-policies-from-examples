@@ -13,6 +13,7 @@ set -e
 
 cd /home/user
 
+bash scripts/baseline.sh
 bash scripts/method.sh
 bash scripts/evaluate_train.sh
 bash scripts/evaluate_test.sh

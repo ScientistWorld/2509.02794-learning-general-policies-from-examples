@@ -1,6 +1,5 @@
-# Final verification complete.
-action: done
+action: submit
 gpus: 0
-test: false
+test: true
 milestone: core_claim
-notes: "Verified core-claim Gripper gym; fixed minor method-agnostic wording and documented gym-derived metrics. Validation passes."
+notes: "CPU smoke job for cleaned Gripper GENEX package: run baseline, method, train/test evaluators, and validate.py --compare."

@@ -29,5 +29,10 @@
 - Tightened method-agnostic wording in evaluation and direction documentation for from-scratch gym use.
 - Documented which reference metrics are paper-reported versus gym-derived, then re-ran `scripts/evaluate.sh` and `python validate.py --compare` successfully.
 
+### [2026-05-31 07:49] - core_claim
+- Added a tracked one-step imitation baseline implementation and made default evaluation report both GENEX and baseline scores.
+- Aligned `TARGETS.md`, `CONSTRAINTS.md`, and `DIRECTION.md` with the hard-instance, capacity-shift, and branching metrics that are actually scored.
+- Local `scripts/reproduce.sh`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and `python validate.py --compare` all passed; submitting a CPU job for container verification.
+
 ## Stop Justification
-- Completed at milestone `core_claim`.
+- Not stopping yet: a CPU verification job is being submitted for the cleaned package.
