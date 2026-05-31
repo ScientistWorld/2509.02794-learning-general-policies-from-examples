@@ -40,4 +40,4 @@
 - Fixed a stale baseline-script comment and removed generated Python cache folders, then re-ran `python validate.py --compare` successfully.
 
 ## Stop Justification
-- Final verification is complete. The workspace is ready as a scaled-down Gripper core-claim research gym.
+- Completed at milestone `core_claim`.
