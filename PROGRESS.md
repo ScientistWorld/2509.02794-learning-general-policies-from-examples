@@ -11,6 +11,9 @@
   `scoring/scores.json`.
 - The simplification pass removes redundant conditions and stable effects while
   preserving stratification, matching the paper's compact Gripper rule count.
+- Continuing-agent audit confirmed that `eval/` does not import from `method/`,
+  the scores are regenerated from the policy artifact, and the scripts remain
+  functional as standalone deliverables.
 
 ## Results
 
@@ -20,6 +23,8 @@
 - The learned policy uses 3 selected features and 4 rules, matching the paper's
   reported Gripper counts. It uses a smaller feature pool than the paper
   because the public code/data URL is missing from the provided markdown.
+- Audit rerun on 2026-05-31 regenerated the same scores via
+  `scripts/reproduce.sh` and passed `python validate.py --compare`.
 
 ## Remaining
 

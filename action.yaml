@@ -5,4 +5,4 @@ action: done
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Verified core claim for Gripper: GENEX+WRAPPER runs end-to-end, independent evaluation reports 100% train and held-out coverage with effective width 0, and validate.py --compare passes."
+notes: "Continuing-agent audit restored core_claim: implementation is GENEX+WRAPPER at Gripper scale, standalone evaluation and reproduce scripts regenerate the scores, and validate.py --compare passes."
