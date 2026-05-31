@@ -1,0 +1,38 @@
+{
+  "experiments": {
+    "gripper_generalization": {
+      "description": "Gripper domain policy learning and larger-instance generalization. Paper reports Gripper in Table 1 and large-instance coverage/effective width in Table 3.",
+      "weight": 1.0,
+      "primary_metric": "large_instance_coverage",
+      "metrics": {
+        "large_instance_coverage": {"higher_is_better": true, "coefficient": 1.0},
+        "train_coverage": {"higher_is_better": true, "coefficient": 0.5},
+        "max_effective_width": {"higher_is_better": false, "coefficient": -0.4},
+        "avg_effective_width": {"higher_is_better": false, "coefficient": -0.3},
+        "selected_features": {"higher_is_better": false, "coefficient": -0.05},
+        "policy_rules": {"higher_is_better": false, "coefficient": -0.05},
+        "max_plan_length_ratio": {"higher_is_better": false, "coefficient": -0.1},
+        "feature_pool": {"higher_is_better": true, "coefficient": 0.02},
+        "inner_iterations": {"higher_is_better": false, "coefficient": -0.05},
+        "outer_iterations": {"higher_is_better": false, "coefficient": -0.05},
+        "hit_constraints": {"higher_is_better": true, "coefficient": 0.01}
+      },
+      "results": {
+        "genex_wrapper": {
+          "type": "proposed",
+          "large_instance_coverage": 1.0,
+          "train_coverage": 1.0,
+          "max_effective_width": 0.0,
+          "avg_effective_width": 0.0,
+          "selected_features": 3.0,
+          "policy_rules": 4.0,
+          "max_plan_length_ratio": 1.0,
+          "feature_pool": 6154.0,
+          "inner_iterations": 1.0,
+          "outer_iterations": 1.0,
+          "hit_constraints": 38.0
+        }
+      }
+    }
+  }
+}

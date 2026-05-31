@@ -17,4 +17,4 @@ set -e
 
 cd /home/user
 
-# TODO: run baseline
+bash scripts/evaluate.sh --include-baseline --policy outputs/missing_policy.json

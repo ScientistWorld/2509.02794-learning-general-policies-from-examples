@@ -1,21 +1,19 @@
 # Reproduction Milestones
 
-**Current: none**
-
-<!-- Milestone levels (update "Current" above as you progress):
-  none             — just started, no meaningful progress yet
-  method_runs      — the paper's method executes end-to-end without errors
-  core_claim       — minimum experiment supports the paper's central claim
-  core_claim_plus  — core claim reproduced on additional settings
-  secondary_claims — secondary results or contributions reproduced
-  majority         — more than half of reported results reproduced
-  near_complete    — most results reproduced, only minor gaps remain
-  full             — all reported results reproduced
--->
+**Current: method_runs**
 
 ## Progress Log
 
-<!-- Write your progress here -->
+### [2026-05-31 00:00] - none
+- Read the paper markdown and identified GENEX, WRAPPER, stratified policies,
+  coverage, and effective width as the core reproduction targets.
+- Confirmed the workspace was scaffold-only.
+
+### [2026-05-31 00:00] - method_runs
+- Implemented a self-contained Gripper benchmark and feature pool.
+- Implemented GENEX as a greedy hitting-set learner with stratification chains
+  and WRAPPER-style transition seeding.
+- Ran the method locally on the lightweight benchmark and produced a policy
+  artifact plus `scoring/scores.json`.
 
 ## Stop Justification
-- Completed at milestone `none`.
