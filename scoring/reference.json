@@ -5,17 +5,86 @@
       "weight": 1.0,
       "primary_metric": "large_instance_coverage",
       "metrics": {
-        "large_instance_coverage": {"higher_is_better": true, "coefficient": 1.0},
-        "train_coverage": {"higher_is_better": true, "coefficient": 0.5},
-        "max_effective_width": {"higher_is_better": false, "coefficient": -0.4},
-        "avg_effective_width": {"higher_is_better": false, "coefficient": -0.3},
-        "selected_features": {"higher_is_better": false, "coefficient": -0.05},
-        "policy_rules": {"higher_is_better": false, "coefficient": -0.05},
-        "max_plan_length_ratio": {"higher_is_better": false, "coefficient": -0.1},
-        "feature_pool": {"higher_is_better": true, "coefficient": 0.02},
-        "inner_iterations": {"higher_is_better": false, "coefficient": -0.05},
-        "outer_iterations": {"higher_is_better": false, "coefficient": -0.05},
-        "hit_constraints": {"higher_is_better": true, "coefficient": 0.01}
+        "large_instance_coverage": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Fraction of larger Gripper instances solved by the learned policy."
+        },
+        "hard_instance_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.4,
+          "description": "Coverage on the larger half of each slice, catching policies tuned only to easier visible instances."
+        },
+        "capacity_shift_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on same-domain instances with held-out gripper capacities."
+        },
+        "train_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on the small learning instances, guarding against methods that abandon the original task."
+        },
+        "max_effective_width": {
+          "higher_is_better": false,
+          "coefficient": -0.3,
+          "description": "Worst-case search-width proxy induced by unsolved larger instances."
+        },
+        "avg_effective_width": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Average search-width proxy induced by incomplete larger-instance coverage."
+        },
+        "max_applicable_successors": {
+          "higher_is_better": false,
+          "coefficient": -0.25,
+          "description": "Largest number of legal successors admitted by the policy at a visited decision state."
+        },
+        "avg_applicable_successors": {
+          "higher_is_better": false,
+          "coefficient": -0.15,
+          "description": "Mean number of legal successors admitted by the policy across visited decision states."
+        },
+        "selected_features": {
+          "higher_is_better": false,
+          "coefficient": -0.05,
+          "description": "Number of selected symbolic features in the emitted policy artifact."
+        },
+        "policy_rules": {
+          "higher_is_better": false,
+          "coefficient": -0.05,
+          "description": "Number of abstract policy rules in the emitted policy artifact."
+        },
+        "max_plan_length_ratio": {
+          "higher_is_better": false,
+          "coefficient": -0.1,
+          "description": "Worst solved-instance action-count ratio relative to the domain planner."
+        },
+        "avg_plan_length_ratio": {
+          "higher_is_better": false,
+          "coefficient": -0.05,
+          "description": "Mean solved-instance action-count ratio relative to the domain planner."
+        },
+        "feature_pool": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Diagnostic self-reported size of the candidate feature pool; not scored because it is method-reported."
+        },
+        "inner_iterations": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic self-reported inner-loop count; not scored because future methods may not expose it."
+        },
+        "outer_iterations": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic self-reported outer-loop count; not scored because future methods may not expose it."
+        },
+        "hit_constraints": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Diagnostic self-reported constraint count; not scored because it is method-reported."
+        }
       },
       "results": {
         "genex_wrapper": {

@@ -5,7 +5,7 @@ import json
 import re
 from pathlib import Path
 
-from data.gripper import feature_pool, planner, successors, test_instances, training_instances
+from data.gripper import Instance, feature_pool, planner, successors, test_instances, training_instances
 
 
 SLICE = "test"
@@ -16,6 +16,14 @@ EXPERIMENT = "gripper_generalization"
 
 def _slice_instances():
     return [instance for index, instance in enumerate(test_instances()) if index % 2 == 1]
+
+
+def _capacity_shift_instances():
+    return [
+        Instance("test_capacity_3_balls_9", 9, capacity=3),
+        Instance("test_capacity_3_balls_15", 15, capacity=3),
+        Instance("test_capacity_4_balls_21", 21, capacity=4),
+    ]
 
 
 def _valuation(feature, state) -> str:
@@ -56,44 +64,77 @@ def _execute(policy: dict, instance, max_steps: int = 1000) -> dict:
     state = instance.initial()
     seen = set()
     actions = []
+    branch_counts = []
     for _ in range(max_steps):
         if state.is_goal():
-            return {"solved": True, "actions": actions, "reason": "goal"}
+            return {"solved": True, "actions": actions, "reason": "goal", "branch_counts": branch_counts}
         if state.key() in seen:
-            return {"solved": False, "actions": actions, "reason": "cycle"}
+            return {"solved": False, "actions": actions, "reason": "cycle", "branch_counts": branch_counts}
         seen.add(state.key())
         candidates = [
             transition
             for transition in successors(state)
             if any(_matches(rule, transition, selected) for rule in policy["rules"])
         ]
+        branch_counts.append(len(candidates))
         if not candidates:
-            return {"solved": False, "actions": actions, "reason": "undefined"}
+            return {"solved": False, "actions": actions, "reason": "undefined", "branch_counts": branch_counts}
         chosen = candidates[0]
         actions.append(chosen.action)
         state = chosen.target
-    return {"solved": False, "actions": actions, "reason": "max_steps"}
+    return {"solved": False, "actions": actions, "reason": "max_steps", "branch_counts": branch_counts}
+
+
+def _coverage(results: list[dict]) -> float:
+    return sum(result["solved"] for result in results) / len(results)
+
+
+def _hard_instances(instances):
+    threshold = sorted(instance.balls for instance in instances)[len(instances) // 2]
+    return [instance for instance in instances if instance.balls >= threshold]
+
+
+def _branching_metrics(results: list[dict]) -> tuple[float, float]:
+    counts = [count for result in results for count in result["branch_counts"]]
+    if not counts:
+        return 0.0, 0.0
+    return float(max(counts)), sum(counts) / len(counts)
 
 
 def evaluate_policy(policy: dict) -> dict[str, float]:
     train = training_instances()
     large = _slice_instances()
+    hard = _hard_instances(large)
+    capacity_shift = _capacity_shift_instances()
     train_results = [_execute(policy, instance) for instance in train]
     large_results = [_execute(policy, instance) for instance in large]
-    train_coverage = sum(result["solved"] for result in train_results) / len(train_results)
-    large_coverage = sum(result["solved"] for result in large_results) / len(large)
+    hard_results = [_execute(policy, instance) for instance in hard]
+    capacity_results = [_execute(policy, instance) for instance in capacity_shift]
+    train_coverage = _coverage(train_results)
+    large_coverage = _coverage(large_results)
+    hard_coverage = _coverage(hard_results)
+    capacity_coverage = _coverage(capacity_results)
     max_plan_ratio = 0.0
+    plan_ratios = []
     for instance, result in zip(large, large_results):
         if result["solved"]:
-            max_plan_ratio = max(max_plan_ratio, len(result["actions"]) / max(1, len(planner(instance))))
+            ratio = len(result["actions"]) / max(1, len(planner(instance)))
+            plan_ratios.append(ratio)
+            max_plan_ratio = max(max_plan_ratio, ratio)
+    max_branching, avg_branching = _branching_metrics(large_results + capacity_results)
     return {
         "train_coverage": train_coverage,
         "large_instance_coverage": large_coverage,
+        "hard_instance_coverage": hard_coverage,
+        "capacity_shift_coverage": capacity_coverage,
         "max_effective_width": 0.0 if large_coverage == 1.0 else 1.0,
         "avg_effective_width": 0.0 if large_coverage == 1.0 else 1.0 - large_coverage,
+        "max_applicable_successors": max_branching,
+        "avg_applicable_successors": avg_branching,
         "selected_features": float(len(policy["selected_features"])),
         "policy_rules": float(len(policy["rules"])),
         "max_plan_length_ratio": max_plan_ratio,
+        "avg_plan_length_ratio": sum(plan_ratios) / len(plan_ratios) if plan_ratios else 0.0,
     }
 
 
@@ -109,11 +150,16 @@ def baseline_metrics() -> dict[str, float]:
     return {
         "train_coverage": 0.0,
         "large_instance_coverage": solved / len(large),
+        "hard_instance_coverage": 0.0,
+        "capacity_shift_coverage": 0.0,
         "max_effective_width": 1.0,
         "avg_effective_width": 1.0,
+        "max_applicable_successors": 1.0,
+        "avg_applicable_successors": 1.0,
         "selected_features": 0.0,
         "policy_rules": 1.0,
         "max_plan_length_ratio": 0.0,
+        "avg_plan_length_ratio": 0.0,
     }
 
 
@@ -187,7 +233,7 @@ def main() -> None:
             "Could not find policy artifacts for method(s) listed in train scores: " + ", ".join(missing)
         )
 
-    scores = {"experiments": {EXPERIMENT: {"results": {}}}}
+    scores = {"slice": SLICE, "experiments": {EXPERIMENT: {"results": {}}}}
     results = scores["experiments"][EXPERIMENT]["results"]
     if args.include_baseline or "one_step_imitation" in requested:
         results["one_step_imitation"] = baseline_metrics()
