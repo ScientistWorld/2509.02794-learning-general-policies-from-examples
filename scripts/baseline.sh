@@ -17,4 +17,5 @@ set -e
 
 cd /home/user
 
-bash scripts/evaluate.sh --include-baseline --policy outputs/missing_policy.json
+mkdir -p tmp
+bash scripts/evaluate.sh --include-baseline --policy outputs/missing_policy.json --output tmp/baseline_scores.json

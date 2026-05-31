@@ -29,7 +29,9 @@ def _matches(rule: dict, transition, features_by_name: dict) -> bool:
     for name, expected in rule["condition"]:
         if _valuation(features_by_name[name], transition.source) != expected:
             return False
-    for name, expected in rule["effects"]:
+    effects = dict(rule["effects"])
+    for name, feature in features_by_name.items():
+        expected = effects.get(name, "same")
         if _effect(features_by_name[name], transition) != expected:
             return False
     return True

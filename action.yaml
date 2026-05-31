@@ -4,5 +4,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: method_runs
-notes: "CPU smoke job: run GENEX/WRAPPER Gripper reproduction, write scores.json, and validate the packaged environment."
+milestone: core_claim
+notes: "CPU verification job: run the GENEX/WRAPPER Gripper reproduction with stratified simplification, write scores.json, and validate with python validate.py --compare."

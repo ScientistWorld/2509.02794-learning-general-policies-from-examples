@@ -210,8 +210,12 @@ def _rule_matches(rule: Rule, transition: Transition, by_name: dict[str, Feature
     for name, expected in rule.condition:
         if valuation(by_name[name], transition.source) != expected:
             return False
-    for name, expected in rule.effects:
+    effects = dict(rule.effects)
+    for name in by_name:
+        expected = effects.get(name, "same")
         actual = effect(by_name[name], transition)
+        if expected == "any":
+            continue
         if expected == "same" and actual != "same":
             return False
         if expected != "same" and actual != expected:
@@ -226,6 +230,134 @@ def policy_successors(policy: Policy, state: State) -> list[Transition]:
         if any(_rule_matches(rule, transition, by_name) for rule in policy.rules):
             out.append(transition)
     return out
+
+
+def _dedupe_rules(rules: list[Rule]) -> list[Rule]:
+    seen: set[tuple[tuple[tuple[str, str], ...], tuple[tuple[str, str], ...]]] = set()
+    out: list[Rule] = []
+    for rule in rules:
+        condition = tuple(sorted(rule.condition))
+        effects = tuple(sorted(rule.effects))
+        signature = (condition, effects)
+        if signature in seen:
+            continue
+        seen.add(signature)
+        out.append(Rule(condition, effects, rule.source_action))
+    return out
+
+
+def _rule_entails_change(rule: Rule) -> bool:
+    return any(value not in {"same", "="} for _, value in rule.effects)
+
+
+def _rule_change(rule: Rule, feature_name: str) -> str:
+    value = dict(rule.effects).get(feature_name, "same")
+    if value in {"up", "true"}:
+        return "up"
+    if value in {"down", "false"}:
+        return "down"
+    return "same"
+
+
+def _rule_allows_context(rule: Rule, feature_name: str, context_value: str) -> bool:
+    value = dict(rule.condition).get(feature_name)
+    return value is None or value == context_value
+
+
+def _rules_monotone(feature_name: str, rules: list[Rule]) -> bool:
+    changes = {_rule_change(rule, feature_name) for rule in rules}
+    return not ("up" in changes and "down" in changes)
+
+
+def _rules_monotone_given(feature_name: str, context_name: str, rules: list[Rule]) -> bool:
+    for context_value in ["0", "1"]:
+        subset = [
+            rule
+            for rule in rules
+            if _rule_change(rule, context_name) == "same" and _rule_allows_context(rule, context_name, context_value)
+        ]
+        if not _rules_monotone(feature_name, subset):
+            return False
+    return True
+
+
+def policy_is_stratified(policy: Policy) -> bool:
+    feature_names = [feature.name for feature in policy.features]
+    ranked: set[str] = set()
+    while len(ranked) < len(feature_names):
+        added = False
+        for name in feature_names:
+            if name in ranked:
+                continue
+            if _rules_monotone(name, policy.rules):
+                ranked.add(name)
+                added = True
+                continue
+            if any(_rules_monotone_given(name, context, policy.rules) for context in ranked):
+                ranked.add(name)
+                added = True
+        if not added:
+            return False
+    return True
+
+
+def _avoids_bad(policy: Policy, x_neg: list[Transition]) -> bool:
+    by_name = _feature_by_name(policy.features)
+    return not any(any(_rule_matches(rule, transition, by_name) for rule in policy.rules) for transition in x_neg)
+
+
+def _solves(policy: Policy, instances: list[Instance]) -> bool:
+    return all(execute_policy(policy, inst)["solved"] for inst in instances)
+
+
+def simplify_policy(policy: Policy, x_neg: list[Transition], validation_instances: list[Instance]) -> Policy:
+    """Greedy version of the paper's optional simplification step.
+
+    It removes rule conditions and drops explicit "same" effects, which leaves
+    the paper's default unchanged-effect semantics. A candidate is kept only if
+    every rule still entails some selected feature change, the rule set remains
+    stratified, no negative transition is admitted, and the policy continues
+    solving the wrapper validation instances.
+    """
+
+    current = Policy(policy.features, _dedupe_rules(policy.rules), policy.order, policy.selected_names)
+    improved = True
+    while improved:
+        improved = False
+        best: Policy | None = None
+        best_size = (len(current.rules), sum(len(r.condition) + len(r.effects) for r in current.rules))
+        for rule_index, rule in enumerate(current.rules):
+            edits: list[Rule] = []
+            for cond_index in range(len(rule.condition)):
+                edits.append(
+                    Rule(rule.condition[:cond_index] + rule.condition[cond_index + 1 :], rule.effects, rule.source_action)
+                )
+            for eff_index, (_, eff_value) in enumerate(rule.effects):
+                if eff_value in {"same", "="}:
+                    edits.append(
+                        Rule(rule.condition, rule.effects[:eff_index] + rule.effects[eff_index + 1 :], rule.source_action)
+                    )
+            for edited in edits:
+                new_rules = list(current.rules)
+                new_rules[rule_index] = edited
+                new_rules = _dedupe_rules(new_rules)
+                if not all(_rule_entails_change(r) for r in new_rules):
+                    continue
+                candidate = Policy(current.features, new_rules, current.order, current.selected_names)
+                if not policy_is_stratified(candidate):
+                    continue
+                if not _avoids_bad(candidate, x_neg):
+                    continue
+                if not _solves(candidate, validation_instances):
+                    continue
+                size = (len(candidate.rules), sum(len(r.condition) + len(r.effects) for r in candidate.rules))
+                if size < best_size:
+                    best = candidate
+                    best_size = size
+        if best is not None:
+            current = best
+            improved = True
+    return current
 
 
 def execute_policy(policy: Policy, instance: Instance, max_steps: int = 1000) -> dict[str, object]:
@@ -282,6 +414,7 @@ def learn_gripper_policy(extra_distractors: int = 120) -> tuple[Policy, dict[str
             raise RuntimeError(f"wrapper could not repair undefined state {state}")
         x_pos.append(add)
 
+    policy = simplify_policy(policy, x_neg, train)
     stats = {
         "outer_iterations": outer_iterations,
         "inner_iterations": inner_iterations,

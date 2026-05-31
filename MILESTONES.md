@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
@@ -15,5 +15,14 @@
   and WRAPPER-style transition seeding.
 - Ran the method locally on the lightweight benchmark and produced a policy
   artifact plus `scoring/scores.json`.
+
+### [2026-05-31 00:00] - core_claim
+- Added the paper's optional policy simplification pass with checks that the
+  simplified rule set remains stratified and solves the wrapper validation
+  instances.
+- Reproduced the paper's Gripper core result on the packaged benchmark:
+  100% train coverage, 100% large-instance coverage, effective width 0, three
+  selected features, and four policy rules.
+- `python validate.py --compare` passes with independent evaluation.
 
 ## Stop Justification
