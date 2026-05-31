@@ -6,4 +6,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Run evaluate_train.sh and evaluate_test.sh on the existing final policy artifact; populate split scores."
+notes: "Rerun split evaluators with the one-step baseline included by default to check non-saturation across methods."

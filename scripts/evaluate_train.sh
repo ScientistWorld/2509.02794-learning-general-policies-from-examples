@@ -10,4 +10,4 @@ cd /home/user
 
 mkdir -p scoring
 
-python -m eval.train.evaluate_gripper "$@"
+python -m eval.train.evaluate_gripper --include-baseline "$@"
