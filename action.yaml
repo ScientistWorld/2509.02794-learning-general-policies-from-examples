@@ -6,4 +6,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Rerun split evaluators with the one-step baseline included by default to check non-saturation across methods."
+notes: "Rerun split evaluators after adding missing zero-coefficient diagnostic fields to the baseline rows."

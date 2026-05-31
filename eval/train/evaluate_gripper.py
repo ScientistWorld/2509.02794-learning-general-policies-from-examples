@@ -159,6 +159,10 @@ def baseline_metrics() -> dict[str, float]:
         "policy_rules": 1.0,
         "max_plan_length_ratio": 0.0,
         "avg_plan_length_ratio": 0.0,
+        "feature_pool": 0.0,
+        "inner_iterations": 0.0,
+        "outer_iterations": 0.0,
+        "hit_constraints": 0.0,
     }
 
 
