@@ -29,6 +29,10 @@
   larger held-out instances, matching the paper's reported Gripper train/test
   counts more closely. The next submitted CPU job reruns the full pipeline on
   this corrected split.
+- Continuing audit on 2026-05-31 confirmed that `method/` implements recognizable
+  GENEX/WRAPPER computational steps rather than a surrogate, `eval/` remains
+  independent from `method/`, and standalone evaluation works. The one-step
+  imitation baseline scores 0% large-instance coverage, while GENEX scores 100%.
 
 ## Remaining
 
