@@ -1,14 +1,9 @@
 #!/bin/bash
-# Run a baseline method from the paper.
+# Run the simple reference baseline used by this gym.
 #
-# Baselines are simple reference methods the paper compares against. 
-# Implement this only if applicable, i.e. the paper has baselines.
-# You do not need to implement all baselines to begin — 
-# just enough to validate that the evaluation pipeline works 
-# and provide a reference point. You can decide to expand more baselines later.
-# Each baseline must be actually run and scored through evaluate.sh
-# so the numbers are verified, not self-reported.
-# You can decide what this baseline script should do yourself.
+# The baseline is intentionally weak: it imitates one local action and then
+# stops. Its purpose is to verify that the evaluator distinguishes a direct
+# one-step heuristic from a generalized policy artifact.
 #
 # Usage:
 #   bash scripts/baseline.sh <name>

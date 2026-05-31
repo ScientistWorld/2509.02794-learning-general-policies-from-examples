@@ -34,5 +34,10 @@
 - Aligned `TARGETS.md`, `CONSTRAINTS.md`, and `DIRECTION.md` with the hard-instance, capacity-shift, and branching metrics that are actually scored.
 - Local `scripts/reproduce.sh`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and `python validate.py --compare` all passed; submitting a CPU job for container verification.
 
+### [2026-05-31 07:52] - core_claim
+- Completed final verification without downgrading the milestone.
+- Confirmed method/problem separation, download portability, train/test evaluator wiring, and scoring coefficients are suitable for the Gripper gym.
+- Fixed a stale baseline-script comment and removed generated Python cache folders, then re-ran `python validate.py --compare` successfully.
+
 ## Stop Justification
-- Not stopping yet: a CPU verification job is being submitted for the cleaned package.
+- Final verification is complete. The workspace is ready as a scaled-down Gripper core-claim research gym.
