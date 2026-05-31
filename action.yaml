@@ -1,7 +1,6 @@
-# Submit a CPU test job to verify the final evaluator/scoring packaging.
-# Once this file is written, stop immediately so the scheduler can run it.
-action: submit
+# Final verification complete.
+action: done
 gpus: 0
-test: true
+test: false
 milestone: core_claim
-notes: "Regenerate the GENEX Gripper policy, run default/train/test evaluation, and validate the richer scores.json constraint metrics in the compute container."
+notes: "Verified core-claim Gripper gym; fixed minor method-agnostic wording and documented gym-derived metrics. Validation passes."

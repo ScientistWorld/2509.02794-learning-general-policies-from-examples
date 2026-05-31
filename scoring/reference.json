@@ -2,6 +2,7 @@
   "experiments": {
     "gripper_generalization": {
       "description": "Gripper domain policy learning and larger-instance generalization. Paper reports Gripper in Table 1 and large-instance coverage/effective width in Table 3.",
+      "notes": "Paper-reported values are used for large_instance_coverage, train_coverage, effective width, selected_features, policy_rules, feature_pool, wrapper iterations, and hit_constraints. policy_quality and the hard/capacity/branching metrics are gym-specific derived metrics added to make future scoring less gameable; they are computed by eval/ and not claimed as paper-reported numbers.",
       "weight": 1.0,
       "primary_metric": "policy_quality",
       "metrics": {

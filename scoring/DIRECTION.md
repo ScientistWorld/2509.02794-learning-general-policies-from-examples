@@ -15,10 +15,9 @@ within this family of interpretable, feature-based generalized policies.
 
 ## Approach Scope
 
-Scientists may improve feature selection, transition selection, wrapper repair
-strategies, policy simplification, ranking/termination tests, or the scoring
-heuristic used to choose features. The output must still be an executable
-feature-rule policy over the benchmark dynamics.
+Scientists may improve how examples are chosen, how compact state features are
+defined, how rules are formed, and how policy validity is checked. The output
+must still be an executable feature-rule policy over the benchmark dynamics.
 
 ## Out of Bounds
 

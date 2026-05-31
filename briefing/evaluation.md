@@ -10,8 +10,8 @@ coverage checks generalization.
 Effective width measures whether the learned object acts as a direct policy or
 needs extra search. Width 0 is best and means the policy selects an applicable
 successor directly. The evaluator also records compactness constraints:
-selected feature count, policy rule count, wrapper iteration counts, and plan
-length ratio against the domain planner.
+selected feature count, policy rule count, optional learning diagnostics, and
+plan length ratio against the domain planner.
 
 ## Baselines and Targets
 
@@ -24,5 +24,5 @@ inner iteration, three selected features, and four policy rules.
 The reusable benchmark trains on five small Gripper instances with 1 through 5
 balls and evaluates on thirty larger instances with 6 through 35 balls, matching
 the paper's reported Gripper train/test counts. The evaluator reads a policy JSON
-artifact written by the method and executes it independently using only the
+artifact written by a submitted solver and executes it independently using only the
 problem dynamics in `data/`. Scores are written to `scoring/scores.json`.

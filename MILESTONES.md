@@ -24,5 +24,10 @@
 - Updated the default evaluator so `scoring/scores.json` includes the same benefit and constraint metrics defined in `scoring/reference.json`.
 - Local rerun of `scripts/method.sh`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and `python validate.py --compare` passed.
 
+### [2026-05-31 07:45] - core_claim
+- Final verification kept the milestone at `core_claim`.
+- Tightened method-agnostic wording in evaluation and direction documentation for from-scratch gym use.
+- Documented which reference metrics are paper-reported versus gym-derived, then re-ran `scripts/evaluate.sh` and `python validate.py --compare` successfully.
+
 ## Stop Justification
 - Completed at milestone `core_claim`.
