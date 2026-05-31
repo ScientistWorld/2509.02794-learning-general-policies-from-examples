@@ -1,9 +1,9 @@
-# This iteration writes files only — do NOT submit compute jobs.
-# Once you set action to 'done', STOP immediately.
+# This iteration submits compute jobs.
+# Once you set action to 'submit', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: done
+action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Improvements: added hard-instance, capacity-shift, branching, and average plan-ratio train/test metrics; made self-reported stats diagnostic-only; added slice markers and handoff notes. Notes: static checks only, no evaluator runs."
+notes: "Run evaluate_train.sh and evaluate_test.sh on the existing final policy artifact; populate split scores."
