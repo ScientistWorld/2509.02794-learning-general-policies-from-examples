@@ -21,6 +21,10 @@ instances, adds planner-recommended transitions when the policy is undefined,
 and adds bad transitions when a policy step reaches a dead end. The outer loop
 tests candidate policies over the full training collection.
 
+The paper's code-release footnote points to
+`https://github.com/bonetblai/learner-policies-from-examples`, verified on
+2026-05-31 at commit `9991926f7655c4b6c8dc2f0404123639e42056f2`.
+
 ## Main Claims
 
 The primary claim is that the GENEX plus WRAPPER pipeline can learn terminating,

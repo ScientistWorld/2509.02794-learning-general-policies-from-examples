@@ -4,7 +4,7 @@ from pathlib import Path
 import argparse
 import json
 
-from data.gripper import feature_pool, planner, successors, test_instances, training_instances
+from data.gripper import Instance, feature_pool, planner, successors, test_instances, training_instances
 
 
 def _valuation(feature, state) -> str:
@@ -45,42 +45,88 @@ def _execute(policy: dict, instance, max_steps: int = 1000) -> dict:
     state = instance.initial()
     seen = set()
     actions = []
+    branch_counts = []
     for _ in range(max_steps):
         if state.is_goal():
-            return {"solved": True, "actions": actions, "reason": "goal"}
+            return {"solved": True, "actions": actions, "reason": "goal", "branch_counts": branch_counts}
         if state.key() in seen:
-            return {"solved": False, "actions": actions, "reason": "cycle"}
+            return {"solved": False, "actions": actions, "reason": "cycle", "branch_counts": branch_counts}
         seen.add(state.key())
         candidates = [
             t for t in successors(state) if any(_matches(rule, t, selected) for rule in policy["rules"])
         ]
+        branch_counts.append(len(candidates))
         if not candidates:
-            return {"solved": False, "actions": actions, "reason": "undefined"}
+            return {"solved": False, "actions": actions, "reason": "undefined", "branch_counts": branch_counts}
         chosen = candidates[0]
         actions.append(chosen.action)
         state = chosen.target
-    return {"solved": False, "actions": actions, "reason": "max_steps"}
+    return {"solved": False, "actions": actions, "reason": "max_steps", "branch_counts": branch_counts}
+
+
+def _coverage(results: list[dict]) -> float:
+    return sum(result["solved"] for result in results) / len(results)
+
+
+def _hard_instances(instances):
+    threshold = sorted(instance.balls for instance in instances)[len(instances) // 2]
+    return [instance for instance in instances if instance.balls >= threshold]
+
+
+def _capacity_shift_instances():
+    return [
+        Instance("capacity_3_balls_8", 8, capacity=3),
+        Instance("capacity_3_balls_9", 9, capacity=3),
+        Instance("capacity_3_balls_14", 14, capacity=3),
+        Instance("capacity_3_balls_15", 15, capacity=3),
+        Instance("capacity_4_balls_20", 20, capacity=4),
+        Instance("capacity_4_balls_21", 21, capacity=4),
+    ]
+
+
+def _branching_metrics(results: list[dict]) -> tuple[float, float]:
+    counts = [count for result in results for count in result["branch_counts"]]
+    if not counts:
+        return 0.0, 0.0
+    return float(max(counts)), sum(counts) / len(counts)
 
 
 def evaluate_policy(policy: dict) -> dict[str, float]:
     train = training_instances()
     test = test_instances()
+    hard = _hard_instances(test)
+    capacity_shift = _capacity_shift_instances()
     train_results = [_execute(policy, inst) for inst in train]
     test_results = [_execute(policy, inst) for inst in test]
-    train_coverage = sum(r["solved"] for r in train_results) / len(train_results)
-    test_coverage = sum(r["solved"] for r in test_results) / len(test_results)
+    hard_results = [_execute(policy, inst) for inst in hard]
+    capacity_results = [_execute(policy, inst) for inst in capacity_shift]
+    train_coverage = _coverage(train_results)
+    test_coverage = _coverage(test_results)
+    hard_coverage = _coverage(hard_results)
+    capacity_coverage = _coverage(capacity_results)
     max_plan_ratio = 0.0
+    plan_ratios = []
     for inst, result in zip(test, test_results):
         if result["solved"]:
-            max_plan_ratio = max(max_plan_ratio, len(result["actions"]) / max(1, len(planner(inst))))
+            ratio = len(result["actions"]) / max(1, len(planner(inst)))
+            plan_ratios.append(ratio)
+            max_plan_ratio = max(max_plan_ratio, ratio)
+    max_branching, avg_branching = _branching_metrics(test_results + capacity_results)
+    policy_quality = test_coverage - 0.05 * avg_branching
     return {
+        "policy_quality": policy_quality,
         "train_coverage": train_coverage,
         "large_instance_coverage": test_coverage,
+        "hard_instance_coverage": hard_coverage,
+        "capacity_shift_coverage": capacity_coverage,
         "max_effective_width": 0.0 if test_coverage == 1.0 else 1.0,
         "avg_effective_width": 0.0 if test_coverage == 1.0 else 1.0 - test_coverage,
+        "max_applicable_successors": max_branching,
+        "avg_applicable_successors": avg_branching,
         "selected_features": float(len(policy["selected_features"])),
         "policy_rules": float(len(policy["rules"])),
         "max_plan_length_ratio": max_plan_ratio,
+        "avg_plan_length_ratio": sum(plan_ratios) / len(plan_ratios) if plan_ratios else 0.0,
     }
 
 
@@ -94,13 +140,23 @@ def baseline_metrics() -> dict[str, float]:
         if state.is_goal():
             solved += 1
     return {
+        "policy_quality": -0.05,
         "train_coverage": 0.0,
         "large_instance_coverage": solved / len(tests),
+        "hard_instance_coverage": 0.0,
+        "capacity_shift_coverage": 0.0,
         "max_effective_width": 1.0,
         "avg_effective_width": 1.0,
+        "max_applicable_successors": 1.0,
+        "avg_applicable_successors": 1.0,
         "selected_features": 0.0,
         "policy_rules": 1.0,
         "max_plan_length_ratio": 0.0,
+        "avg_plan_length_ratio": 0.0,
+        "feature_pool": 0.0,
+        "inner_iterations": 0.0,
+        "outer_iterations": 0.0,
+        "hit_constraints": 0.0,
     }
 
 

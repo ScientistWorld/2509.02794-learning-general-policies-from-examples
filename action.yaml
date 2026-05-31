@@ -1,9 +1,7 @@
-# This iteration is complete.
-# Once you set action to 'done', STOP immediately.
-# Do NOT sleep, poll, or wait. The system reads this file
-# only after your turn ends.
-action: done
+# Submit a CPU test job to verify the final evaluator/scoring packaging.
+# Once this file is written, stop immediately so the scheduler can run it.
+action: submit
 gpus: 0
-test: false
+test: true
 milestone: core_claim
-notes: "Audited fresh-clone packaging; download.sh has no external fetches because the Gripper benchmark is generated in tracked code, and data/downloads/.gitkeep is now tracked with a correct ignore rule."
+notes: "Regenerate the GENEX Gripper policy, run default/train/test evaluation, and validate the richer scores.json constraint metrics in the compute container."

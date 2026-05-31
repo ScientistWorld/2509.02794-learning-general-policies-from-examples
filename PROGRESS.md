@@ -33,6 +33,13 @@
   GENEX/WRAPPER computational steps rather than a surrogate, `eval/` remains
   independent from `method/`, and standalone evaluation works. The one-step
   imitation baseline scores 0% large-instance coverage, while GENEX scores 100%.
+- The recovered footnote code URL was verified with `git ls-remote` at
+  `https://github.com/bonetblai/learner-policies-from-examples`, commit
+  `9991926f7655c4b6c8dc2f0404123639e42056f2`.
+- The default evaluator now reports all benchmark constraint metrics in
+  `scoring/scores.json`: hard-instance coverage, capacity-shift coverage,
+  applicable-successor branching, and average plan-length ratio. Local
+  validation passed after regenerating the policy and all score files.
 
 ## Remaining
 
