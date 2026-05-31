@@ -32,6 +32,8 @@ def _matches(rule: dict, transition, features_by_name: dict) -> bool:
     effects = dict(rule["effects"])
     for name, feature in features_by_name.items():
         expected = effects.get(name, "same")
+        if expected == "any":
+            continue
         if _effect(features_by_name[name], transition) != expected:
             return False
     return True

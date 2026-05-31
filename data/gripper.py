@@ -109,12 +109,15 @@ def all_states(instance: Instance) -> list[State]:
 
 
 def planner(instance: Instance) -> list[Transition]:
-    state = instance.initial()
+    return planner_from_state(instance.initial())
+
+
+def planner_from_state(state: State) -> list[Transition]:
     plan: list[Transition] = []
     seen: set[tuple[int, int, bool, int, int]] = set()
     while not state.is_goal():
         if state.key() in seen:
-            raise RuntimeError(f"planner looped on {instance}")
+            raise RuntimeError(f"planner looped on {state}")
         seen.add(state.key())
         if state.at_a and state.balls_at_a > 0 and state.carried < state.capacity:
             chosen = next(t for t in successors(state) if t.action == "pick")
@@ -156,11 +159,11 @@ def feature_pool(extra_distractors: int = 80) -> list[Feature]:
 
 
 def training_instances() -> list[Instance]:
-    return [Instance(f"train_{n}", n) for n in [3, 4, 5]]
+    return [Instance(f"train_{n}", n) for n in range(1, 6)]
 
 
 def test_instances() -> list[Instance]:
-    return [Instance(f"test_{n}", n) for n in range(6, 31)]
+    return [Instance(f"test_{n}", n) for n in range(6, 36)]
 
 
 def transition_change(feature: Feature, transition: Transition) -> str:

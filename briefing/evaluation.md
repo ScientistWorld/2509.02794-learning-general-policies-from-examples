@@ -21,7 +21,8 @@ inner iteration, three selected features, and four policy rules.
 
 ## Evaluation Protocol
 
-The reusable benchmark trains on small Gripper instances and evaluates on larger
-instances with more balls. The evaluator reads a policy JSON artifact written by
-the method and executes it independently using only the problem dynamics in
-`data/`. Scores are written to `scoring/scores.json`.
+The reusable benchmark trains on five small Gripper instances with 1 through 5
+balls and evaluates on thirty larger instances with 6 through 35 balls, matching
+the paper's reported Gripper train/test counts. The evaluator reads a policy JSON
+artifact written by the method and executes it independently using only the
+problem dynamics in `data/`. Scores are written to `scoring/scores.json`.

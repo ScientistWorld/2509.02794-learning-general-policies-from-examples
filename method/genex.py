@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import product
 from pathlib import Path
+import heapq
 import json
 
 from data.gripper import (
@@ -16,6 +17,7 @@ from data.gripper import (
     effect,
     feature_pool,
     planner,
+    planner_from_state,
     successors,
     test_instances,
     training_instances,
@@ -73,27 +75,25 @@ def _compute_chains(features: list[Feature], x_pos: list[Transition], free: set[
             if context.name != target.name and _monotone_given(target, context, x_pos):
                 edges[context.name].append(target.name)
 
-    chains: dict[str, tuple[str, ...]] = {}
-    for target in features:
-        best: tuple[int, tuple[str, ...]] | None = None
-        for root in roots:
-            queue: list[tuple[str, ...]] = [(root,)]
-            seen = {root}
-            while queue:
-                chain = queue.pop(0)
-                node = chain[-1]
-                if node == target.name:
-                    candidate = (_chain_cost(chain, features, free), chain)
-                    if best is None or candidate < best:
-                        best = candidate
-                    break
-                for nxt in sorted(edges[node], key=lambda n: by_name[n].complexity):
-                    if nxt not in seen:
-                        seen.add(nxt)
-                        queue.append(chain + (nxt,))
-        if best is not None:
-            chains[target.name] = best[1]
-    return chains
+    costs = {f.name: 0 if f.name in free else f.complexity for f in features}
+    best: dict[str, tuple[int, tuple[str, ...]]] = {}
+    heap: list[tuple[int, tuple[str, ...], str]] = []
+    for root in roots:
+        chain = (root,)
+        heapq.heappush(heap, (costs[root], chain, root))
+
+    while heap:
+        cost, chain, node = heapq.heappop(heap)
+        if node in best:
+            continue
+        best[node] = (cost, chain)
+        for nxt in sorted(edges[node], key=lambda n: (costs[n], by_name[n].complexity, n)):
+            if nxt in best or nxt in chain:
+                continue
+            next_chain = chain + (nxt,)
+            heapq.heappush(heap, (cost + costs[nxt], next_chain, nxt))
+
+    return {name: chain for name, (_, chain) in best.items()}
 
 
 def _chain_cost(chain: tuple[str, ...], features: list[Feature], free: set[str]) -> int:
@@ -383,48 +383,87 @@ def execute_policy(policy: Policy, instance: Instance, max_steps: int = 1000) ->
 def learn_gripper_policy(extra_distractors: int = 120) -> tuple[Policy, dict[str, object]]:
     features = feature_pool(extra_distractors)
     train = training_instances()
-    x_pos: list[Transition] = []
-    x_neg: list[Transition] = []
-    outer_iterations = 1
-    inner_iterations = 0
-    # Strategy S1 on the largest training instance is enough for Gripper, matching the paper category C1.
-    q_prime = [train[-1]]
-    for inst in q_prime:
-        x_pos.extend(planner(inst))
+    ordered_train = sorted(train, key=lambda inst: len(planner(inst)), reverse=True)
+    plans = {inst.name: planner(inst) for inst in ordered_train}
+    outer_iterations = 0
+    total_inner_iterations = 0
+    current_index = 0
+    final_x_pos: list[Transition] = []
+    final_x_neg: list[Transition] = []
+    final_hit_sets: list[set[str]] = []
+    final_q_prime: list[Instance] = []
 
-    while True:
-        inner_iterations += 1
-        selected, order, hit_sets = genex(features, x_pos, x_neg)
-        policy = project_policy(features, selected, x_pos, order)
-        failure = None
-        for inst in q_prime:
-            result = execute_policy(policy, inst)
-            if not result["solved"]:
-                failure = (inst, result)
+    # Strategy S1 from Algorithm 2: test each learned policy on all Q and move
+    # the singleton Q' to the first failing instance when needed.
+    while current_index < len(ordered_train):
+        outer_iterations += 1
+        q_prime = [ordered_train[current_index]]
+        x_pos = list(plans[q_prime[0].name])
+        x_neg: list[Transition] = []
+        inner_iterations = 0
+
+        while True:
+            inner_iterations += 1
+            total_inner_iterations += 1
+            selected, order, hit_sets = genex(features, x_pos, x_neg)
+            policy = project_policy(features, selected, x_pos, order)
+            failure = None
+            for inst in q_prime:
+                result = execute_policy(policy, inst)
+                if not result["solved"]:
+                    failure = (inst, result)
+                    break
+            if failure is None:
                 break
-        if failure is None:
-            break
-        inst, result = failure
-        state = inst.initial()
-        for action in result["actions"]:
-            state = next(t.target for t in successors(state) if t.action == action)
-        remaining_plan = planner(Instance(inst.name, inst.balls, inst.capacity))
-        add = next((t for t in remaining_plan if t.source == state), None)
-        if add is None:
-            raise RuntimeError(f"wrapper could not repair undefined state {state}")
-        x_pos.append(add)
+            inst, result = failure
+            state = inst.initial()
+            previous_state = state
+            for action in result["actions"]:
+                previous_state = state
+                state = next(t.target for t in successors(state) if t.action == action)
+            if result["reason"] == "undefined":
+                repair_plan = planner_from_state(state)
+                if not repair_plan:
+                    raise RuntimeError(f"wrapper could not repair undefined state {state}")
+                x_pos.append(repair_plan[0])
+            elif result["reason"] == "cycle":
+                raise RuntimeError(f"wrapper found a cycle despite GENEX stratification on {inst.name}")
+            else:
+                bad = next(
+                    (t for t in successors(previous_state) if t.target == state),
+                    None,
+                )
+                if bad is None:
+                    raise RuntimeError(f"wrapper could not identify bad transition into {state}")
+                x_neg.append(bad)
 
-    policy = simplify_policy(policy, x_neg, train)
+        policy = simplify_policy(policy, x_neg, train)
+        final_x_pos = x_pos
+        final_x_neg = x_neg
+        final_hit_sets = hit_sets
+        final_q_prime = q_prime
+
+        full_results = [execute_policy(policy, inst) for inst in ordered_train]
+        failing = next((idx for idx, result in enumerate(full_results) if not result["solved"]), None)
+        if failing is None:
+            break
+        if failing > current_index:
+            current_index = failing
+        else:
+            current_index += 1
+    else:
+        raise RuntimeError("WRAPPER S1 failed to find a policy for the Gripper training set")
+
     stats = {
         "outer_iterations": outer_iterations,
-        "inner_iterations": inner_iterations,
-        "x_pos": len(x_pos),
-        "x_neg": len(x_neg),
-        "hit_constraints": len(hit_sets),
+        "inner_iterations": total_inner_iterations,
+        "x_pos": len(final_x_pos),
+        "x_neg": len(final_x_neg),
+        "hit_constraints": len(final_hit_sets),
         "selected_features": len(policy.features),
         "policy_rules": len(policy.rules),
         "feature_pool": len(features),
-        "states_seen": sum(len(planner(inst)) + 1 for inst in q_prime),
+        "states_seen": sum(len(plans[inst.name]) + 1 for inst in final_q_prime),
     }
     return policy, stats
 

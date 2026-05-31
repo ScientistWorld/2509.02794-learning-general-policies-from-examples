@@ -2,8 +2,8 @@
 
 ## Primary: gripper_generalization
 
-Tests whether a learned policy solves held-out Gripper instances that are larger
-than the examples used during learning.
+Tests whether a learned policy solves thirty held-out Gripper instances that are
+larger than the five examples used during learning.
 - **Metric:** `large_instance_coverage` (higher is better)
 
 ## Constraint: direct_policy_behavior

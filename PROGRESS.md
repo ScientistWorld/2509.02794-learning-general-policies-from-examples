@@ -25,14 +25,18 @@
   because the public code/data URL is missing from the provided markdown.
 - Audit rerun on 2026-05-31 regenerated the same scores via
   `scripts/reproduce.sh` and passed `python validate.py --compare`.
+- Updated the benchmark split to five Gripper training instances and thirty
+  larger held-out instances, matching the paper's reported Gripper train/test
+  counts more closely. The next submitted CPU job reruns the full pipeline on
+  this corrected split.
 
 ## Remaining
 
 - Optional next step: add another solved paper domain such as Delivery or Ferry
   to move beyond `core_claim`.
 - The packaged environment is complete for the Gripper core-claim gym: method,
-  evaluation, scoring targets, constraints, and end-to-end scripts are present
-  and validated by the completed compute job.
+  evaluation, scoring targets, constraints, and end-to-end scripts are present.
+  The corrected five-train/thirty-test split is queued for container validation.
 
 ## Issues
 
