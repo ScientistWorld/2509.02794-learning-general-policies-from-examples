@@ -20,4 +20,4 @@
 - Reconfirmed the core claim with 100% train coverage, 100% held-out coverage, effective width 0, 3 selected features, and 4 policy rules.
 
 ## Stop Justification
-- Stopping at `core_claim`: the reusable Gripper gym is packaged and validated in the container. Higher milestones would require implementing additional paper domains or the full DLPLAN/TARSKI benchmark stack, which is beyond the completed core-claim reproduction.
+- Completed at milestone `core_claim`.
