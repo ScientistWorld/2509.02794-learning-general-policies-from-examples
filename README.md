@@ -73,6 +73,10 @@ instances, adds planner-recommended transitions when the policy is undefined,
 and adds bad transitions when a policy step reaches a dead end. The outer loop
 tests candidate policies over the full training collection.
 
+The paper's code-release footnote points to
+`https://github.com/bonetblai/learner-policies-from-examples`, verified on
+2026-05-31 at commit `9991926f7655c4b6c8dc2f0404123639e42056f2`.
+
 ## Main Claims
 
 The primary claim is that the GENEX plus WRAPPER pipeline can learn terminating,
@@ -95,8 +99,8 @@ coverage checks generalization.
 Effective width measures whether the learned object acts as a direct policy or
 needs extra search. Width 0 is best and means the policy selects an applicable
 successor directly. The evaluator also records compactness constraints:
-selected feature count, policy rule count, wrapper iteration counts, and plan
-length ratio against the domain planner.
+selected feature count, policy rule count, optional learning diagnostics, and
+plan length ratio against the domain planner.
 
 ## Baselines and Targets
 
@@ -109,7 +113,7 @@ inner iteration, three selected features, and four policy rules.
 The reusable benchmark trains on five small Gripper instances with 1 through 5
 balls and evaluates on thirty larger instances with 6 through 35 balls, matching
 the paper's reported Gripper train/test counts. The evaluator reads a policy JSON
-artifact written by the method and executes it independently using only the
+artifact written by a submitted solver and executes it independently using only the
 problem dynamics in `data/`. Scores are written to `scoring/scores.json`.
 
 ---
@@ -314,6 +318,41 @@ problem dynamics in `data/`. Scores are written to `scoring/scores.json`.
 - Completed CPU container job `86843c23-d46` on the corrected five-training/thirty-held-out Gripper split.
 - The job regenerated `outputs/genex_gripper/policy.json`, wrote `scoring/scores.json`, and passed `python validate.py --compare`.
 - Reconfirmed the core claim with 100% train coverage, 100% held-out coverage, effective width 0, 3 selected features, and 4 policy rules.
+
+</details>
+
+### Iteration 8: gpt-5.5 (verifier)
+- **Milestone**: `core_claim` | **Status**: done
+- **Working time**: 6m | **GPU**: 0.0h
+- **Jobs**: 5 total (5 completed, 0 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-05-31 07:13] - core_claim
+- Implemented GENEX hitting-set feature selection with monotonicity chains and a WRAPPER-style repair loop for Gripper.
+- Completed CPU container job `98e1d2b9-b6a`, which regenerated the policy, evaluated it independently, and passed `python validate.py --compare`.
+- Reproduced the Gripper core claim with 100% training coverage, 100% larger-instance coverage, effective width 0, 3 selected features, and 4 policy rules.
+
+### [2026-05-31 07:17] - core_claim
+- Continuing-agent audit found the implementation is a real scaled-down GENEX/WRAPPER reproduction, not a surrogate.
+- Re-ran `scripts/reproduce.sh`, standalone `scripts/evaluate.sh`, and `python validate.py --compare`; all passed locally.
+- Verified the one-step imitation baseline fails on held-out Gripper instances while GENEX reaches 100% held-out coverage, supporting the core generalization claim.
+
+### [2026-05-31 07:18] - core_claim
+- Completed CPU container job `86843c23-d46` on the corrected five-training/thirty-held-out Gripper split.
+- The job regenerated `outputs/genex_gripper/policy.json`, wrote `scoring/scores.json`, and passed `python validate.py --compare`.
+- Reconfirmed the core claim with 100% train coverage, 100% held-out coverage, effective width 0, 3 selected features, and 4 policy rules.
+
+### [2026-05-31 07:35] - core_claim
+- Verified the paper's released code repository URL from the recovered footnote: `https://github.com/bonetblai/learner-policies-from-examples`.
+- Updated the default evaluator so `scoring/scores.json` includes the same benefit and constraint metrics defined in `scoring/reference.json`.
+- Local rerun of `scripts/method.sh`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and `python validate.py --compare` passed.
+
+### [2026-05-31 07:45] - core_claim
+- Final verification kept the milestone at `core_claim`.
+- Tightened method-agnostic wording in evaluation and direction documentation for from-scratch gym use.
+- Documented which reference metrics are paper-reported versus gym-derived, then re-ran `scripts/evaluate.sh` and `python validate.py --compare` successfully.
 
 </details>
 
