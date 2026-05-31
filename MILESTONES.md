@@ -28,7 +28,4 @@
   the same scores through `scripts/run.sh`.
 
 ## Stop Justification
-- Stopping at `core_claim`: the central Gripper claim is implemented with the
-  paper's GENEX/WRAPPER computation and verified in the packaged environment.
-  Additional domains would improve coverage but are beyond the minimum
-  validated reproduction.
+- Completed at milestone `core_claim`.
