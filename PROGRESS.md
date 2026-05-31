@@ -27,8 +27,8 @@
   `scripts/reproduce.sh` and passed `python validate.py --compare`.
 - Updated the benchmark split to five Gripper training instances and thirty
   larger held-out instances, matching the paper's reported Gripper train/test
-  counts more closely. The next submitted CPU job reruns the full pipeline on
-  this corrected split.
+  counts more closely. CPU container job `86843c23-d46` reran the full pipeline
+  on this corrected split and passed `python validate.py --compare`.
 - Continuing audit on 2026-05-31 confirmed that `method/` implements recognizable
   GENEX/WRAPPER computational steps rather than a surrogate, `eval/` remains
   independent from `method/`, and standalone evaluation works. The one-step
@@ -36,11 +36,11 @@
 
 ## Remaining
 
-- Optional next step: add another solved paper domain such as Delivery or Ferry
-  to move beyond `core_claim`.
 - The packaged environment is complete for the Gripper core-claim gym: method,
   evaluation, scoring targets, constraints, and end-to-end scripts are present.
-  The corrected five-train/thirty-test split is queued for container validation.
+- Optional next step for a future agent: add another solved paper domain such as
+  Delivery or Ferry, or port the benchmark to DLPLAN/TARSKI, to move beyond
+  `core_claim`.
 
 ## Issues
 

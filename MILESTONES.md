@@ -14,5 +14,10 @@
 - Re-ran `scripts/reproduce.sh`, standalone `scripts/evaluate.sh`, and `python validate.py --compare`; all passed locally.
 - Verified the one-step imitation baseline fails on held-out Gripper instances while GENEX reaches 100% held-out coverage, supporting the core generalization claim.
 
+### [2026-05-31 07:18] - core_claim
+- Completed CPU container job `86843c23-d46` on the corrected five-training/thirty-held-out Gripper split.
+- The job regenerated `outputs/genex_gripper/policy.json`, wrote `scoring/scores.json`, and passed `python validate.py --compare`.
+- Reconfirmed the core claim with 100% train coverage, 100% held-out coverage, effective width 0, 3 selected features, and 4 policy rules.
+
 ## Stop Justification
-- Not stopping yet; submitting a rerun on the corrected five-train/thirty-test Gripper split.
+- Stopping at `core_claim`: the reusable Gripper gym is packaged and validated in the container. Higher milestones would require implementing additional paper domains or the full DLPLAN/TARSKI benchmark stack, which is beyond the completed core-claim reproduction.

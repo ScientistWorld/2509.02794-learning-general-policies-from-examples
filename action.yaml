@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
 test: true
 milestone: core_claim
-notes: "CPU container rerun after fixing minimum-cost GENEX chains, adding WRAPPER S1 outer-loop testing, and aligning Gripper to five training / thirty held-out instances."
+notes: "CPU container job 86843c23-d46 passed: GENEX/WRAPPER Gripper reproduction achieved 100% train and held-out coverage, effective width 0, 3 features, 4 rules, and validate.py --compare passed."
