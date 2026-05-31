@@ -1,8 +1,6 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
-gpus: 0
-test: true
+action: done
 milestone: core_claim
-notes: "CPU verification job: run the GENEX/WRAPPER Gripper reproduction with stratified simplification, write scores.json, and validate with python validate.py --compare."
+notes: "Core claim reproduced and verified by CPU container job 98e1d2b9-b6a: scripts/run.sh regenerated the GENEX/WRAPPER Gripper policy, wrote scores.json, and validate.py --compare passed."

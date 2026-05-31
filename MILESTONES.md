@@ -24,5 +24,11 @@
   100% train coverage, 100% large-instance coverage, effective width 0, three
   selected features, and four policy rules.
 - `python validate.py --compare` passes with independent evaluation.
+- CPU container job `98e1d2b9-b6a` completed with exit code 0 and reproduced
+  the same scores through `scripts/run.sh`.
 
 ## Stop Justification
+- Stopping at `core_claim`: the central Gripper claim is implemented with the
+  paper's GENEX/WRAPPER computation and verified in the packaged environment.
+  Additional domains would improve coverage but are beyond the minimum
+  validated reproduction.

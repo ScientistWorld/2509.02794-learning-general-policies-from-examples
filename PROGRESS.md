@@ -14,17 +14,17 @@
 
 ## Results
 
-- Local smoke test reproduced the Gripper core claim on the generated benchmark:
-  100% training coverage, 100% large-instance coverage, max effective width 0,
-  and average effective width 0.
+- Local smoke test and CPU container job `98e1d2b9-b6a` reproduced the Gripper
+  core claim on the generated benchmark: 100% training coverage, 100%
+  large-instance coverage, max effective width 0, and average effective width 0.
 - The learned policy uses 3 selected features and 4 rules, matching the paper's
   reported Gripper counts. It uses a smaller feature pool than the paper
   because the public code/data URL is missing from the provided markdown.
 
 ## Remaining
 
-- Submit the CPU test job to verify the packaged environment.
-- Optional next step: add another solved paper domain such as Delivery or Ferry.
+- Optional next step: add another solved paper domain such as Delivery or Ferry
+  to move beyond `core_claim`.
 
 ## Issues
 
