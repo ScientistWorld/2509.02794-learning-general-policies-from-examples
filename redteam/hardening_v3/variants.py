@@ -154,23 +154,150 @@ def childsnack_better_all_states(out: Path, ref: Path) -> None:
             return result
         return _verify_from(policy, _alive_states(instance), domain)
 
+    _copy_reference(ref, out, "policy.json")
     G.verify_policy = verify_from_all_states
     try:
         _learn(childsnack, out, "childsnack_policy.json")
     finally:
         G.verify_policy = original
+
+
+# --- Learned: extra training starts drawn from states reachable in the training instances.
+#
+# CONSTRAINTS.md allows any state reachable in the ten training instances. These
+# learners keep GENEX + WRAPPER unchanged and only enlarge Q with some of those
+# states as additional starting situations (each with its own optimal example
+# plan from the domain planner).
+
+
+class _StartAt:
+    """A training instance restarted from one of its reachable states."""
+
+    def __init__(self, name: str, state):
+        self.name = name
+        self._state = state
+
+    def initial(self):
+        return self._state
+
+
+class _AugmentedDomain:
+    """The Childsnack domain with a larger training set Q; everything else delegated."""
+
+    def __init__(self, extra: list):
+        self._extra = list(extra)
+
+    def training_instances(self):
+        return childsnack.training_instances() + self._extra
+
+    def __getattr__(self, name):
+        return getattr(childsnack, name)
+
+
+def _alive_off_plan(instance) -> list:
+    """Alive non-goal reachable states of a training instance that its example plan never visits."""
+    plan = childsnack.planner(instance)
+    on_plan = {instance.initial().key()} | {t.target.key() for t in plan}
+    return sorted(
+        (s for s in childsnack.all_states(instance)
+         if not s.is_goal() and not childsnack.is_dead_end(s) and s.key() not in on_plan),
+        key=lambda s: s.key(),
+    )
+
+
+def _made_or_moved(s) -> bool:
+    return (s.gf_kitchen + s.reg_kitchen + s.gf_tray + s.reg_tray) > 0 or s.tray != 0
+
+
+def _learn_with(extra: list, out: Path) -> dict:
+    policy, stats = G.learn_policy(_AugmentedDomain(extra))
+    stats = dict(stats, extra_training_starts=len(extra))
+    G.policy_to_json(policy, stats, out / "childsnack_policy.json")
+    return stats
+
+
+def childsnack_better_aug_made_k2(out: Path, ref: Path) -> None:
+    """Learned: Q plus two off-plan training states per instance with food already made or the tray moved.
+
+    Deterministic sample (seed 0). Targets the situations DIRECTION.md names
+    (sandwiches already made, tray at a table) using only training-reachable states.
+    """
+    import random
+
     _copy_reference(ref, out, "policy.json")
+    rng = random.Random(0)
+    extra = []
+    for inst in childsnack.training_instances():
+        pool = [s for s in _alive_off_plan(inst) if _made_or_moved(s)]
+        for i, state in enumerate(rng.sample(pool, min(2, len(pool)))):
+            extra.append(_StartAt(f"{inst.name}+made{i}", state))
+    print(_learn_with(extra, out), flush=True)
+
+
+def _local_failures(policy, states: list) -> list:
+    """States where the policy is undefined or admits a transition into a dead end."""
+    bad = []
+    for s in states:
+        succ = G.policy_successors(policy, s, childsnack)
+        if not succ or any(not t.target.is_goal() and childsnack.is_dead_end(t.target) for t in succ):
+            bad.append(s)
+    return bad
+
+
+def childsnack_better_greedy_closure(out: Path, ref: Path, budget_s: float = 1500.0) -> None:
+    """Learned: grow Q greedily with training-reachable states where the current policy fails.
+
+    Start from the reference learner. Repeatedly take the first (by state key)
+    alive reachable state of a training instance where the learned policy is
+    undefined or steps into a dead end, add it to Q as a new start, and rerun
+    GENEX + WRAPPER. If WRAPPER cannot accommodate it (GENEX finds no stratified
+    feature set), drop that state and try the next. Stops when no failing state
+    is left, or when the time budget runs out (keeping the last policy learned).
+    """
+    import time
+
+    from method.genex import WrapperFailure
+
+    _copy_reference(ref, out, "policy.json")
+    start = time.time()
+    alive = sorted(
+        {s.key(): s for inst in childsnack.training_instances() for s in childsnack.all_states(inst)
+         if not s.is_goal() and not childsnack.is_dead_end(s)}.values(),
+        key=lambda s: s.key(),
+    )
+    extra: list = []
+    rejected: set = set()
+    stats = _learn_with(extra, out)
+    policy = G.policy_from_json(out / "childsnack_policy.json", childsnack)
+    print(f"[greedy] base: {stats} ({time.time() - start:.0f}s)", flush=True)
+    while time.time() - start < budget_s:
+        failing = [s for s in _local_failures(policy, alive) if s.key() not in rejected]
+        print(f"[greedy] {len(failing)} failing training-reachable states", flush=True)
+        if not failing:
+            break
+        state = failing[0]
+        trial = extra + [_StartAt(f"greedy{len(extra)}", state)]
+        try:
+            policy_t, stats_t = G.learn_policy(_AugmentedDomain(trial))
+        except WrapperFailure as error:
+            rejected.add(state.key())
+            print(f"[greedy] reject {state.key()}: {error} ({time.time() - start:.0f}s)", flush=True)
+            continue
+        extra, policy = trial, policy_t
+        G.policy_to_json(policy, dict(stats_t, extra_training_starts=len(extra)), out / "childsnack_policy.json")
+        print(f"[greedy] accept #{len(extra)}: rules={len(policy.rules)} features={len(policy.features)} "
+              f"({time.time() - start:.0f}s)", flush=True)
 
 
 def childsnack_weaker_no_simplification(out: Path, ref: Path) -> None:
     """Learned: the reference pipeline without the optional simplification (line 6)."""
+    _copy_reference(ref, out, "policy.json")
     original = G.simplify_policy
     G.simplify_policy = lambda policy, x_neg, q_prime=None, domain=None: policy
     try:
         _learn(childsnack, out, "childsnack_policy.json")
     finally:
         G.simplify_policy = original
-    _copy_reference(ref, out, "policy.json")
 
 
 def childsnack_weaker_wasteful_make(out: Path, ref: Path) -> None:
@@ -238,7 +365,10 @@ CASES = {
     "gripper_weaker_lazy_one_ball": gripper_weaker_lazy_one_ball,
     "gripper_weaker_redundant_feature": _saved_gripper("v2_weaker_redundant_feature"),
     "gripper_weaker_no_pick": _saved_gripper("v2_weaker_no_pick"),
-    "childsnack_better_all_states": childsnack_better_all_states,
+    # childsnack_better_all_states is kept for the record but not run by default:
+    # in job b1f65488-01e WRAPPER failed on it after 870 s (no stratified feature set).
+    "childsnack_better_aug_made_k2": childsnack_better_aug_made_k2,
+    "childsnack_better_greedy_closure": childsnack_better_greedy_closure,
     "childsnack_weaker_no_simplification": childsnack_weaker_no_simplification,
     "childsnack_weaker_wasteful_make": childsnack_weaker_wasteful_make,
     "shortcut_missing_childsnack": shortcut_missing_childsnack,

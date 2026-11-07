@@ -1,0 +1,843 @@
+{
+  "build_returncodes": {
+    "childsnack_better_all_states": 1,
+    "childsnack_weaker_no_simplification": 0,
+    "childsnack_weaker_wasteful_make": 0,
+    "gripper_better_refinement": 0,
+    "gripper_weaker_lazy_one_ball": 0,
+    "gripper_weaker_no_pick": 0,
+    "gripper_weaker_redundant_feature": 0,
+    "reference@0": 0,
+    "reference@1": 0,
+    "reference@2": 0,
+    "shortcut_childsnack_admit_all": 0,
+    "shortcut_childsnack_forged": 0,
+    "shortcut_childsnack_unknown_feature": 0,
+    "shortcut_childsnack_unstratified": 0,
+    "shortcut_gripper_handwritten_optimal": 0,
+    "shortcut_gripper_implicit_planner": 0,
+    "shortcut_gripper_impossible_values": 0,
+    "shortcut_gripper_undercount_features": 0,
+    "shortcut_gripper_unknown_feature": 0,
+    "shortcut_missing_childsnack": 0
+  },
+  "cases": {
+    "childsnack_better_all_states": {
+      "metrics": {},
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.6243365740664736,
+        "gripper_generalization": -1.3087784468656993,
+        "total": -1.9331150209321728
+      },
+      "weighted": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": 0.0,
+        "total": 0.0
+      }
+    },
+    "childsnack_weaker_no_simplification": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.42561915897930225,
+          "heldout_coverage": 0.2222222222222222,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.2222222222222222,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.08333333333333333,
+          "selected_features": 12.0,
+          "size_coverage": 0.5833333333333334,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.46023182329773704,
+        "gripper_generalization": 0.0,
+        "total": -0.46023182329773693
+      },
+      "weighted": {
+        "childsnack_generalization": 0.328209501537473,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 1.4728831976344359
+      }
+    },
+    "childsnack_weaker_wasteful_make": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.027777777777777776,
+          "initial_state_shift_coverage": 0.08333333333333333,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.5
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.8729476851775847,
+        "gripper_generalization": 0.0,
+        "total": -0.8729476851775846
+      },
+      "weighted": {
+        "childsnack_generalization": -0.4972222222222223,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 1.0601673357545882
+      }
+    },
+    "gripper_better_refinement": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.0,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.0,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 1.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.0,
+          "policy_quality": 1.0,
+          "policy_rules": 5.0,
+          "selected_features": 4.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": 0.041221553134300315,
+        "total": 0.041221553134300315
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": 2.6999999999999993,
+        "total": 1.9743365740664731
+      }
+    },
+    "gripper_weaker_lazy_one_ball": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.0,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 1.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.7538070569294542,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": -0.07328771636799103,
+        "total": -0.07328771636799081
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": 2.4709814609954166,
+        "total": 1.859827304564182
+      }
+    },
+    "gripper_weaker_no_pick": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": -3.283778446865699,
+        "total": -3.283778446865699
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": -3.9499999999999997,
+        "total": -1.3506634259335262
+      }
+    },
+    "gripper_weaker_redundant_feature": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 4.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": -0.025000000000000133,
+        "total": -0.02499999999999991
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": 2.5675568937313984,
+        "total": 1.908115020932173
+      }
+    },
+    "reference@0": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": 0.0,
+        "total": 0.0
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 1.9331150209321728
+      }
+    },
+    "reference@1": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": 0.0,
+        "total": 0.0
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 1.9331150209321728
+      }
+    },
+    "reference@2": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": 0.0,
+        "total": 0.0
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 1.9331150209321728
+      }
+    },
+    "shortcut_childsnack_admit_all": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.9743365740664736,
+        "gripper_generalization": 0.0,
+        "total": -0.9743365740664734
+      },
+      "weighted": {
+        "childsnack_generalization": -0.7,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 0.9587784468656994
+      }
+    },
+    "shortcut_childsnack_forged": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.9743365740664736,
+        "gripper_generalization": 0.0,
+        "total": -0.9743365740664734
+      },
+      "weighted": {
+        "childsnack_generalization": -0.7,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 0.9587784468656994
+      }
+    },
+    "shortcut_childsnack_unknown_feature": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.9743365740664736,
+        "gripper_generalization": 0.0,
+        "total": -0.9743365740664734
+      },
+      "weighted": {
+        "childsnack_generalization": -0.7,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 0.9587784468656994
+      }
+    },
+    "shortcut_childsnack_unstratified": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.9743365740664736,
+        "gripper_generalization": 0.0,
+        "total": -0.9743365740664734
+      },
+      "weighted": {
+        "childsnack_generalization": -0.7,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 0.9587784468656994
+      }
+    },
+    "shortcut_gripper_handwritten_optimal": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.0,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.0,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 1.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.0,
+          "policy_quality": 1.0,
+          "policy_rules": 5.0,
+          "selected_features": 4.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": 0.041221553134300315,
+        "total": 0.041221553134300315
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": 2.6999999999999993,
+        "total": 1.9743365740664731
+      }
+    },
+    "shortcut_gripper_implicit_planner": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": -3.283778446865699,
+        "total": -3.283778446865699
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": -3.9499999999999997,
+        "total": -1.3506634259335262
+      }
+    },
+    "shortcut_gripper_impossible_values": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": -3.283778446865699,
+        "total": -3.283778446865699
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": -3.9499999999999997,
+        "total": -1.3506634259335262
+      }
+    },
+    "shortcut_gripper_undercount_features": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": -3.283778446865699,
+        "total": -3.283778446865699
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": -3.9499999999999997,
+        "total": -1.3506634259335262
+      }
+    },
+    "shortcut_gripper_unknown_feature": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 0.05246447144404629,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879568,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": 0.0,
+        "gripper_generalization": -3.283778446865699,
+        "total": -3.283778446865699
+      },
+      "weighted": {
+        "childsnack_generalization": 1.2486731481329472,
+        "gripper_generalization": -3.9499999999999997,
+        "total": -1.3506634259335262
+      }
+    },
+    "shortcut_missing_childsnack": {
+      "metrics": {
+        "childsnack_generalization": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.0
+        },
+        "gripper_generalization": {
+          "avg_applicable_successors": 1.1903731746890212,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.376511918680734,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.64,
+          "policy_quality": 0.9003824896654362,
+          "policy_rules": 4.0,
+          "selected_features": 3.0,
+          "train_coverage": 1.0
+        }
+      },
+      "rank_vs_reference": {
+        "childsnack_generalization": -0.9743365740664736,
+        "gripper_generalization": 0.0,
+        "total": -0.9743365740664734
+      },
+      "weighted": {
+        "childsnack_generalization": -0.7,
+        "gripper_generalization": 2.6175568937313987,
+        "total": 0.9587784468656994
+      }
+    }
+  },
+  "reference_seeds_identical": true,
+  "reference_weighted_by_seed": {
+    "0": 1.9331150209321728,
+    "1": 1.9331150209321728,
+    "2": 1.9331150209321728
+  }
+}
