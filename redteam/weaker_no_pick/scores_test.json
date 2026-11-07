@@ -1,0 +1,47 @@
+{
+  "experiments": {
+    "gripper_generalization": {
+      "results": {
+        "genex_wrapper": {
+          "avg_applicable_successors": 0.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 0.0,
+          "capacity_shift_coverage": 0.0,
+          "feature_pool": 127.0,
+          "hard_instance_coverage": 0.0,
+          "hit_constraints": 30.0,
+          "inner_iterations": 1.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 0.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 0.0,
+          "outer_iterations": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 3.0,
+          "selected_features": 3.0,
+          "train_coverage": 0.0
+        },
+        "one_step_imitation": {
+          "avg_applicable_successors": 1.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 0.0,
+          "capacity_shift_coverage": 0.0,
+          "feature_pool": 0.0,
+          "hard_instance_coverage": 0.0,
+          "hit_constraints": 0.0,
+          "inner_iterations": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 1.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 0.0,
+          "outer_iterations": 0.0,
+          "policy_quality": -0.05,
+          "policy_rules": 1.0,
+          "selected_features": 0.0,
+          "train_coverage": 0.0
+        }
+      }
+    }
+  },
+  "slice": "test"
+}

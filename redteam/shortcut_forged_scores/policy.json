@@ -1,0 +1,21 @@
+{
+  "coverage": 1.0,
+  "order": [],
+  "rules": [],
+  "selected_features": [],
+  "solved": true,
+  "stats": {
+    "feature_pool": 1000000000.0,
+    "hit_constraints": 1000000000.0,
+    "inner_iterations": -1000000000.0,
+    "large_instance_coverage": 1000000000.0,
+    "max_effective_width": -1000000000.0,
+    "outer_iterations": -1000000000.0,
+    "policy_quality": 1000000000.0,
+    "policy_rules": -1000000000.0,
+    "seconds": -1000000000.0,
+    "selected_features": -1000000000.0
+  },
+  "success": true,
+  "timing": -1000000000.0
+}

@@ -1,0 +1,23 @@
+{
+  "experiments": {
+    "gripper_generalization": {
+      "results": {
+        "genex_wrapper": {
+          "policy_quality": 1000000000.0,
+          "large_instance_coverage": 1000000000.0,
+          "train_coverage": 1000000000.0,
+          "hard_instance_coverage": 1000000000.0,
+          "capacity_shift_coverage": 1000000000.0,
+          "selected_features": -1000000000.0,
+          "policy_rules": -1000000000.0,
+          "max_effective_width": -1000000000.0,
+          "avg_effective_width": -1000000000.0,
+          "max_applicable_successors": -1000000000.0,
+          "avg_applicable_successors": -1000000000.0,
+          "max_plan_length_ratio": -1000000000.0,
+          "avg_plan_length_ratio": -1000000000.0
+        }
+      }
+    }
+  }
+}

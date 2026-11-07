@@ -1,0 +1,12 @@
+{
+  "order": [],
+  "rules": [
+    {
+      "condition": [],
+      "effects": [],
+      "source_action": "shortcut_admit_everything"
+    }
+  ],
+  "selected_features": [],
+  "stats": {}
+}
