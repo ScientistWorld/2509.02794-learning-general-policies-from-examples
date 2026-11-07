@@ -1,0 +1,21 @@
+{
+  "rules": [
+    {
+      "condition": [
+        [
+          "distance_to_goal",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "distance_to_goal",
+          "down"
+        ]
+      ]
+    }
+  ],
+  "selected_features": [
+    "distance_to_goal"
+  ]
+}

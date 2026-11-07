@@ -15,11 +15,11 @@
           "train_coverage": 0.0
         },
         "genex_wrapper": {
-          "avg_effective_width": 0.052464471444046284,
+          "avg_effective_width": 0.05246447144404629,
           "heldout_coverage": 0.5277777777777778,
           "initial_state_shift_coverage": 0.16666666666666666,
           "max_effective_width": 1.0,
-          "policy_quality": 0.5027765292879569,
+          "policy_quality": 0.5027765292879568,
           "policy_rules": 15.0,
           "resource_shift_coverage": 0.4166666666666667,
           "selected_features": 12.0,
@@ -73,7 +73,7 @@
         "genex_wrapper": {
           "avg_applicable_successors": 1.1903731746890212,
           "avg_effective_width": 0.0,
-          "avg_plan_length_ratio": 1.3765119186807342,
+          "avg_plan_length_ratio": 1.376511918680734,
           "capacity_shift_coverage": 1.0,
           "hard_instance_coverage": 1.0,
           "initial_state_shift_coverage": 1.0,

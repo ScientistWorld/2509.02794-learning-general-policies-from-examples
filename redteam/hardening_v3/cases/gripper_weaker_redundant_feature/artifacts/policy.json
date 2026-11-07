@@ -1,0 +1,89 @@
+{
+  "order": [
+    [
+      "m_carried",
+      "at_a"
+    ],
+    [
+      "n_balls_at_a",
+      "m_carried"
+    ]
+  ],
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "m_carried",
+          "up"
+        ],
+        [
+          "n_balls_at_a",
+          "down"
+        ]
+      ],
+      "source_action": "pick"
+    },
+    {
+      "condition": [
+        [
+          "m_carried",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "at_a",
+          "false"
+        ]
+      ],
+      "source_action": "move_to_b"
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "m_carried",
+          "down"
+        ],
+        [
+          "remaining_work",
+          "down"
+        ]
+      ],
+      "source_action": "drop"
+    },
+    {
+      "condition": [
+        [
+          "m_carried",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "at_a",
+          "true"
+        ]
+      ],
+      "source_action": "move_to_a"
+    }
+  ],
+  "selected_features": [
+    "at_a",
+    "m_carried",
+    "n_balls_at_a",
+    "remaining_work"
+  ],
+  "stats": {
+    "feature_pool": 127,
+    "hit_constraints": 30,
+    "inner_iterations": 1,
+    "outer_iterations": 1,
+    "policy_rules": 4,
+    "selected_features": 3,
+    "states_seen": 16,
+    "x_neg": 0,
+    "x_pos": 15
+  }
+}

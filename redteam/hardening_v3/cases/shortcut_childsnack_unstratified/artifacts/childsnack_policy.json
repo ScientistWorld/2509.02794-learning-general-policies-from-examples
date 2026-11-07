@@ -1,0 +1,49 @@
+{
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "sandwiches_on_tray",
+          "up"
+        ]
+      ]
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "sandwiches_on_tray",
+          "down"
+        ],
+        [
+          "served_children",
+          "up"
+        ]
+      ]
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "tray_at_kitchen",
+          "false"
+        ]
+      ]
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "tray_at_kitchen",
+          "true"
+        ]
+      ]
+    }
+  ],
+  "selected_features": [
+    "sandwiches_on_tray",
+    "tray_at_kitchen",
+    "served_children"
+  ]
+}

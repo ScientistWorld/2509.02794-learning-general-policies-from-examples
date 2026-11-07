@@ -1,0 +1,13 @@
+{
+  "heldout_coverage": 1.0,
+  "max_effective_width": 0.0,
+  "policy_quality": 1.0,
+  "rules": [],
+  "selected_features": [
+    "served_children"
+  ],
+  "stats": {
+    "coverage": 1.0,
+    "solved": true
+  }
+}
