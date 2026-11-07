@@ -1,12 +1,10 @@
 #!/bin/bash
-# Hardening verification job (CPU, no internet).
+# End-to-end reproduction job (CPU, no internet).
 #
-# 1. Rebuild the baselines and relearn the reference policy from the final code.
-# 2. Check that the learner is deterministic across hash seeds.
-# 3. Run every better/weaker variant and every shortcut through the hidden test
-#    (redteam/hardening/harness.py restores all files it touches).
-# 4. Regenerate scoring/scores_train.json and scoring/scores_test.json from the
-#    reference policy and the evaluator-owned baselines alone, then validate.
+# Rebuilds the baselines, relearns the GENEX + WRAPPER reference policy, scores
+# every artifact on disk on the visible and hidden slices, and validates.
+# The hardening audit (variants and shortcuts through the hidden test) can be
+# rerun with: python -m redteam.hardening.harness
 
 set -e
 
@@ -15,8 +13,6 @@ cd /home/user
 rm -rf outputs/candidate
 bash scripts/baseline.sh
 bash scripts/method.sh
-python -m redteam.hardening.seeds
-python -m redteam.hardening.harness
 bash scripts/evaluate_train.sh
 bash scripts/evaluate_test.sh
 python validate.py --post-design --compare

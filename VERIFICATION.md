@@ -19,3 +19,10 @@ The workspace is ready to serve as a research gym. From-scratch agents can use t
 - Ready for gym use: yes
 - Confidence: medium-high
 - Key limitation: scaled-down Gripper-only reproduction with procedural data.
+
+## Hardening Update (iteration 11)
+
+Superseded scoring details. Coverage now follows the paper's all-trajectories
+definition, under standard Gripper dynamics and a structural-termination gate.
+Branching is diagnostic only. The scoring surface above the reference is plan
+efficiency: quality 0.9004 and worst-case ratio 1.64. See `HARDENING.md`.

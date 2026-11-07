@@ -23,3 +23,14 @@
 - The new branching metrics may penalize nondeterministic-but-still-valid generalized policies that admit more than one progress action at a state. This is intentional as an anti-shortcut signal, but the runner should inspect whether it overwhelms coverage in aggregate scoring.
 - Capacity-shift instances are lightweight and use the same Gripper transition system, but the runner should confirm the current reproduced policy still gets non-saturated, interpretable values on train and test.
 - The train/test evaluators still read `policy.json` artifacts from `outputs/`, `checkpoints/`, or `method_outputs/`. A future method must emit that interface or pass `--policy`.
+
+## Hardening Update (iteration 11)
+
+The runtime concerns above are resolved; see `HARDENING.md`.
+
+- Branching metrics are diagnostics with coefficient 0. Under all-trajectories
+  semantics, extra admitted successors matter only through coverage and plan
+  length.
+- Both evaluators no longer read `data/`.
+- The test slice scores every artifact on disk and does not consult
+  `scores_train.json`.

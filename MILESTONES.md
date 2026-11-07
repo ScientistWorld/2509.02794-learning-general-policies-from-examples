@@ -39,5 +39,21 @@
 - Confirmed method/problem separation, download portability, train/test evaluator wiring, and scoring coefficients are suitable for the Gripper gym.
 - Fixed a stale baseline-script comment and removed generated Python cache folders, then re-ran `python validate.py --compare` successfully.
 
+### [2026-11-07] - core_claim (hardening)
+- Gym hardened against the red-team report. Changes:
+  - standard Gripper dynamics, scored with the paper's all-trajectories notion of solving;
+  - a structural-termination gate (k-stratified, k <= 2);
+  - evaluator-owned dynamics, features, optimal lengths, instances and baselines;
+  - hidden test instances that exist only in `eval/test/`;
+  - failure pinning.
+- WRAPPER verification now explores every policy trajectory (Alg. 2, line 7).
+  It still learns the paper's 3-feature / 4-rule Gripper policy in 1 outer and 1 inner iteration.
+- CPU job `3fc1f5d3-2c7`:
+  - the reference solves every hidden instance;
+  - genuine refinement +0.082, lazy variant -0.147;
+  - all shortcuts fail or have no effect;
+  - seed spread 0.
+  See `HARDENING.md`.
+
 ## Stop Justification
 - Completed at milestone `core_claim`.

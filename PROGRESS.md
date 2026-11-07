@@ -45,12 +45,24 @@
   GENEX paths before validation. Local validation passed after this packaging
   cleanup.
 
+## Hardening (iteration 11)
+
+- Evaluation semantics follow the paper. A policy solves an instance only if
+  every maximal policy trajectory reaches the goal, under standard Gripper
+  dynamics. The rule set must be k-stratified (k <= 2).
+- `eval/train/` and `eval/test/` are self-contained and own:
+  - the dynamics and goal test;
+  - feature semantics, BFS optimal plan lengths, instances and baselines.
+- `data/` no longer exposes held-out instances.
+- Results of job `3fc1f5d3-2c7` (details in `HARDENING.md`):
+  - hidden-test reference: coverage 1 on every suite, quality 0.9004,
+    worst-case plan ratio 1.64, 3 features / 4 rules;
+  - `plan_projection` baseline: 50% large coverage.
+
 ## Remaining
 
 - The packaged environment is complete for the Gripper core-claim gym: method,
   evaluation, scoring targets, constraints, and end-to-end scripts are present.
-- Current submitted job is a CPU container smoke test of the cleaned baseline,
-  scoring, and train/test evaluation paths.
 - Optional future work: add another solved paper domain such as Delivery or
   Ferry, or port the benchmark to DLPLAN/TARSKI.
 
