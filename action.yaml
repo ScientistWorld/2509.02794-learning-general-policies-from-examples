@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Resubmit CPU job after fixing the stalled childsnack_better_all_states audit learner (quadratic per-state verification replaced by an equivalent multi-source search; 2400 s per-learner timeout). Rebuild baselines, relearn GENEX+WRAPPER on Gripper and Childsnack, run hardening_v3 audit, regenerate scores, validate."
+notes: "CPU job: full run.sh (baselines, GENEX+WRAPPER on Gripper and Childsnack, hardening_v3 audit, scores, validate). Audit now includes two learned Childsnack variants that enlarge Q with training-reachable states (aug_made_k2, greedy_closure) to test whether a genuine Childsnack improvement ranks above the reference."

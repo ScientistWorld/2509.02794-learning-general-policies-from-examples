@@ -1,0 +1,445 @@
+{
+  "order": [
+    [
+      "allergic_waiting_at_tray",
+      "served_nonallergic"
+    ],
+    [
+      "bread_at_kitchen",
+      "gf_bread_at_kitchen"
+    ],
+    [
+      "gf_bread_at_kitchen",
+      "gf_sandwiches"
+    ],
+    [
+      "gf_sandwiches",
+      "served_children"
+    ],
+    [
+      "gf_sandwiches_on_tray",
+      "allergic_waiting_at_tray"
+    ],
+    [
+      "reg_sandwiches_on_tray",
+      "nonallergic_waiting_at_tray"
+    ],
+    [
+      "sandwiches_at_kitchen",
+      "served_nonallergic"
+    ],
+    [
+      "sandwiches_at_kitchen",
+      "tray_at_kitchen"
+    ],
+    [
+      "sandwiches_on_tray",
+      "sandwiches_at_kitchen"
+    ],
+    [
+      "served_children",
+      "gf_sandwiches_on_tray"
+    ],
+    [
+      "served_children",
+      "sandwiches_on_tray"
+    ],
+    [
+      "served_nonallergic",
+      "reg_sandwiches_on_tray"
+    ]
+  ],
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "bread_at_kitchen",
+          "down"
+        ],
+        [
+          "gf_bread_at_kitchen",
+          "down"
+        ],
+        [
+          "gf_sandwiches",
+          "up"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "up"
+        ]
+      ],
+      "source_action": "make_sandwich_no_gluten"
+    },
+    {
+      "condition": [
+        [
+          "gf_bread_at_kitchen",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "bread_at_kitchen",
+          "down"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "up"
+        ]
+      ],
+      "source_action": "make_sandwich[reg_bread,reg_content]"
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "gf_sandwiches_on_tray",
+          "up"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "down"
+        ],
+        [
+          "sandwiches_on_tray",
+          "up"
+        ]
+      ],
+      "source_action": "put_on_tray[gf]"
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "reg_sandwiches_on_tray",
+          "up"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "down"
+        ],
+        [
+          "sandwiches_on_tray",
+          "up"
+        ]
+      ],
+      "source_action": "put_on_tray[reg]"
+    },
+    {
+      "condition": [
+        [
+          "reg_sandwiches_on_tray",
+          "1"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "nonallergic_waiting_at_tray",
+          "up"
+        ],
+        [
+          "tray_at_kitchen",
+          "false"
+        ]
+      ],
+      "source_action": "move_tray[0->1]"
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "nonallergic_waiting_at_tray",
+          "down"
+        ],
+        [
+          "reg_sandwiches_on_tray",
+          "down"
+        ],
+        [
+          "sandwiches_on_tray",
+          "down"
+        ],
+        [
+          "served_children",
+          "up"
+        ],
+        [
+          "served_nonallergic",
+          "up"
+        ]
+      ],
+      "source_action": "serve_sandwich[reg]"
+    },
+    {
+      "condition": [
+        [
+          "gf_sandwiches_on_tray",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "allergic_waiting_at_tray",
+          "up"
+        ]
+      ],
+      "source_action": "move_tray[1->2]"
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "allergic_waiting_at_tray",
+          "down"
+        ],
+        [
+          "gf_sandwiches_on_tray",
+          "down"
+        ],
+        [
+          "sandwiches_on_tray",
+          "down"
+        ],
+        [
+          "served_children",
+          "up"
+        ]
+      ],
+      "source_action": "serve_sandwich_no_gluten"
+    },
+    {
+      "condition": [
+        [
+          "reg_sandwiches_on_tray",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "nonallergic_waiting_at_tray",
+          "up"
+        ]
+      ],
+      "source_action": "move_tray[3->1]"
+    },
+    {
+      "condition": [
+        [
+          "reg_sandwiches_on_tray",
+          "0"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "nonallergic_waiting_at_tray",
+          "down"
+        ],
+        [
+          "tray_at_kitchen",
+          "true"
+        ]
+      ],
+      "source_action": "move_tray[1->0]"
+    },
+    {
+      "condition": [
+        [
+          "bread_at_kitchen",
+          "0"
+        ],
+        [
+          "gf_sandwiches_on_tray",
+          "1"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "allergic_waiting_at_tray",
+          "up"
+        ],
+        [
+          "tray_at_kitchen",
+          "false"
+        ]
+      ],
+      "source_action": "move_tray[0->1]"
+    },
+    {
+      "condition": [
+        [
+          "gf_sandwiches",
+          "0"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "bread_at_kitchen",
+          "down"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "up"
+        ]
+      ],
+      "source_action": "make_sandwich[reg_bread,reg_content]"
+    },
+    {
+      "condition": [
+        [
+          "tray_at_kitchen",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "bread_at_kitchen",
+          "down"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "up"
+        ]
+      ],
+      "source_action": "make_sandwich[reg_bread,reg_content]"
+    },
+    {
+      "condition": [
+        [
+          "gf_sandwiches_on_tray",
+          "1"
+        ],
+        [
+          "reg_sandwiches_on_tray",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "allergic_waiting_at_tray",
+          "up"
+        ],
+        [
+          "nonallergic_waiting_at_tray",
+          "up"
+        ]
+      ],
+      "source_action": "move_tray[1->2]"
+    },
+    {
+      "condition": [
+        [
+          "sandwiches_at_kitchen",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "tray_at_kitchen",
+          "true"
+        ]
+      ],
+      "source_action": "move_tray[1->0]"
+    },
+    {
+      "condition": [
+        [
+          "gf_sandwiches_on_tray",
+          "1"
+        ],
+        [
+          "reg_sandwiches_on_tray",
+          "1"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "allergic_waiting_at_tray",
+          "up"
+        ],
+        [
+          "nonallergic_waiting_at_tray",
+          "up"
+        ],
+        [
+          "tray_at_kitchen",
+          "false"
+        ]
+      ],
+      "source_action": "move_tray[0->2]"
+    },
+    {
+      "condition": [
+        [
+          "gf_sandwiches_on_tray",
+          "0"
+        ],
+        [
+          "sandwiches_at_kitchen",
+          "1"
+        ]
+      ],
+      "effects": [
+        [
+          "allergic_waiting_at_tray",
+          "down"
+        ],
+        [
+          "tray_at_kitchen",
+          "true"
+        ]
+      ],
+      "source_action": "move_tray[3->0]"
+    }
+  ],
+  "selected_features": [
+    "allergic_waiting_at_tray",
+    "bread_at_kitchen",
+    "gf_bread_at_kitchen",
+    "gf_sandwiches",
+    "gf_sandwiches_on_tray",
+    "nonallergic_waiting_at_tray",
+    "reg_sandwiches_on_tray",
+    "sandwiches_at_kitchen",
+    "sandwiches_on_tray",
+    "served_children",
+    "served_nonallergic",
+    "tray_at_kitchen"
+  ],
+  "stats": {
+    "extra_training_starts": 20,
+    "feature_pool": 148,
+    "hit_constraints": 2007,
+    "inner_iterations": 67,
+    "last_inner_iterations": 1,
+    "last_q_prime": 5,
+    "outer_iterations": 14,
+    "policy_rules": 17,
+    "selected_features": 12,
+    "states_seen": 62,
+    "strategy": "S2",
+    "x_neg": 11,
+    "x_pos": 99
+  }
+}
