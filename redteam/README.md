@@ -1,22 +1,16 @@
-Audit programs and evidence for the Gripper gym. Run the complete audit as a
-CPU job with `bash redteam/run_all.sh`, or run one case's `run.sh` in the gym
-container. Do not run the learning cases on the login node.
+The current audit is documented in [../REDTEAM.md](../REDTEAM.md). Its code and
+reference arithmetic are in `audit_v2/`, and the 22 actual experiment folders
+are named `v2_*`. Run `bash redteam/audit_v2/run_all.sh` as a CPU job in the gym
+container. Each `v2_*/run.sh` also runs one case independently, restores its
+temporary changes, and retains scores and a run record in its own folder.
 
-Each case stages its `method.py` as `method/audit_candidate.py`, generates the
-policy (and, for some shortcuts, changes a scientist-visible dependency), runs
-`bash scripts/evaluate_train.sh`, then runs exactly
-`bash scripts/evaluate_test.sh` with no arguments in a separate process.
-`post_train.py`, when present, represents candidate writes after public scoring.
-The harness never edits `eval/`, the test script, or the Python environment.
-It snapshots and restores every changed method, data, baseline, and score file.
-The bundled job reuses trained reference outputs for output-only changes.
+The current audit uses the unchanged no-argument hidden test in a separate
+process. Candidate code reads only scientist-visible resources, and output-only
+cases reuse this audit's relearned reference. No evaluator or Python environment
+mutation is used. Audit-only reference score files are never candidate inputs.
 
-Every case saves its actual policy, train/test scores when evaluation succeeds,
-and a run record with commands, return codes, evaluator hashes, and restoration
-status. Rejected impossible outputs have a failure record rather than a score.
-Full stdout/stderr logs are ignored; failure excerpts are in the run record.
-`summary.json` records every coefficient and the full score decomposition.
-`audit_reference.json` is audit-only ground truth and is never read by a candidate.
-Candidates use only scientist-visible data and, where stated, improve-mode code.
-The no-feature, fixed-feature, mutable-goal, test-size, empty-output, and forged
-score shortcuts also work with an initially empty `method/`.
+All other folders preserve historical audits and hardening checks of earlier
+gym versions. Their scores and the old `run_all.sh` are historical evidence,
+not results for this iteration. Use `audit_v2/summary.json` for current ranks.
+Logs, caches, and temporary state are ignored; sources, small policies, score
+files, and run records are committed.

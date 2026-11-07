@@ -2,7 +2,7 @@
 
 Candidate execution and evaluation are separate processes; no background process,
 test-source mutation, interpreter mutation, or evaluator import hook is used.
-Only the two-file policy interface is carried from candidate to evaluation.
+Only the two-field policy interface is carried from candidate to evaluation.
 The candidate may also change the ordinary visible source/artifact files tested
 by its shortcut. Everything outside redteam is restored, even on failure.
 """

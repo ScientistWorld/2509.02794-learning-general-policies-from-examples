@@ -1,0 +1,29 @@
+{
+  "all_baseline_rows_unchanged": true,
+  "all_checks_passed": true,
+  "all_evaluator_hashes_unchanged": true,
+  "all_run_restorations_passed": true,
+  "all_run_returncodes_zero": true,
+  "cases": 22,
+  "final_control_file_exception": "action.yaml must signal done per the job protocol",
+  "initial_manifest_mismatches": [],
+  "job_id": "ad39d3a8-cc1",
+  "maximum_failing_delta_vs_reference": -4.267556893731399,
+  "maximum_weighted_score_for_any_failing_policy": -1.6500000000000004,
+  "paying_shortcuts": [
+    "v2_shortcut_handwritten_optimal",
+    "v2_shortcut_handwritten_reference",
+    "v2_shortcut_planner_denominator"
+  ],
+  "preexisting_system_deletions": "Preserved; see initial_status.txt",
+  "reference_matches_supplied": true,
+  "scripts_run_sh_restored_with_git": true,
+  "seed_policy_sha256": "4ccb35321042294789c451a062ee96671d6ac406498d183a140f0927827aa5c9",
+  "seed_scores": [
+    2.6175568937313987,
+    2.6175568937313987,
+    2.6175568937313987
+  ],
+  "seed_spread": 0.0,
+  "shortcuts": 15
+}
