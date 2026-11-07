@@ -1,0 +1,73 @@
+{
+  "experiments": {
+    "gripper_generalization": {
+      "results": {
+        "admit_all_legal": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.0
+        },
+        "candidate": {
+          "avg_applicable_successors": 1.187961385576377,
+          "avg_effective_width": 0.0,
+          "avg_plan_length_ratio": 1.354374914594838,
+          "capacity_shift_coverage": 1.0,
+          "hard_instance_coverage": 1.0,
+          "initial_state_shift_coverage": 1.0,
+          "large_instance_coverage": 1.0,
+          "max_applicable_successors": 2.0,
+          "max_effective_width": 0.0,
+          "max_plan_length_ratio": 1.646153846153846,
+          "policy_quality": 0.8990397969401622,
+          "policy_rules": 4.0,
+          "selected_features": 4.0,
+          "train_coverage": 1.0
+        },
+        "one_step_imitation": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "large_instance_coverage": 0.0,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.0
+        },
+        "plan_projection": {
+          "avg_applicable_successors": 3.0,
+          "avg_effective_width": 1.0,
+          "avg_plan_length_ratio": 3.0,
+          "capacity_shift_coverage": 0.0,
+          "hard_instance_coverage": 0.5555555555555556,
+          "initial_state_shift_coverage": 0.25,
+          "large_instance_coverage": 0.5,
+          "max_applicable_successors": 3.0,
+          "max_effective_width": 1.0,
+          "max_plan_length_ratio": 3.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "selected_features": 20.0,
+          "train_coverage": 0.6
+        }
+      }
+    }
+  },
+  "slice": "train"
+}

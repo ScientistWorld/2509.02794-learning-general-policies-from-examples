@@ -1,0 +1,111 @@
+{
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "m_carried",
+          "up"
+        ],
+        [
+          "n_balls_at_a",
+          "down"
+        ],
+        [
+          "space_in_gripper",
+          "down"
+        ]
+      ],
+      "source_action": "pick"
+    },
+    {
+      "condition": [
+        [
+          "m_carried",
+          "1"
+        ],
+        [
+          "n_balls_at_a",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "at_a",
+          "false"
+        ]
+      ],
+      "source_action": "move_to_b"
+    },
+    {
+      "condition": [
+        [
+          "m_carried",
+          "1"
+        ],
+        [
+          "space_in_gripper",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "at_a",
+          "false"
+        ]
+      ],
+      "source_action": "move_to_b"
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "m_carried",
+          "down"
+        ],
+        [
+          "space_in_gripper",
+          "up"
+        ]
+      ],
+      "source_action": "drop"
+    },
+    {
+      "condition": [
+        [
+          "m_carried",
+          "0"
+        ]
+      ],
+      "effects": [
+        [
+          "at_a",
+          "true"
+        ]
+      ],
+      "source_action": "move_to_a"
+    }
+  ],
+  "selected_features": [
+    "at_a",
+    "m_carried",
+    "n_balls_at_a",
+    "space_in_gripper"
+  ],
+  "training_evidence": {
+    "feasible_candidates": [
+      {
+        "added_feature": "space_in_gripper",
+        "rules": 5
+      }
+    ],
+    "instances": [
+      "train_1",
+      "train_2",
+      "train_3",
+      "train_4",
+      "train_5"
+    ],
+    "labelled_transitions": 175
+  }
+}

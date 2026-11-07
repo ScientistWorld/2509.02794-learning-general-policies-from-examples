@@ -1,0 +1,15 @@
+{
+  "elapsed_seconds": -1e+99,
+  "policy_quality": 1e+99,
+  "policy_rule_count": -1e+99,
+  "rules": [],
+  "selected_feature_count": -1e+99,
+  "selected_features": [],
+  "solved": true,
+  "stats": {
+    "feature_pool": 1e+99,
+    "policy_rules": -1e+99,
+    "selected_features": -1e+99
+  },
+  "success": true
+}

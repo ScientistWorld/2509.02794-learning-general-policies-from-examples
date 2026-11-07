@@ -1,6 +1,4 @@
-# Once you set action to 'submit' or 'done', STOP immediately.
-# Do NOT sleep, poll, or wait for jobs. The system reads this file
-# only after your turn ends.
-action: done
-milestone: core_claim
-notes: "Hardened Gripper gym: paper's all-trajectories coverage, structural-termination gate, evaluator-owned domain/instances/baselines, failure pinning; genuine fix +0.082, lazy -0.147, all 13 shortcuts fail or have no effect; see HARDENING.md"
+action: submit
+gpus: 0
+test: false
+notes: "Run 22-case hardened-gym audit: three reference seeds, learned refinement, weaker variants, and isolated shortcuts through the unchanged no-argument hidden test."

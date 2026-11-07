@@ -1,0 +1,16 @@
+{
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "n_balls_at_a",
+          "down"
+        ]
+      ]
+    }
+  ],
+  "selected_features": [
+    "n_balls_at_a"
+  ]
+}

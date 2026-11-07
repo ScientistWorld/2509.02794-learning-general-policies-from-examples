@@ -1,0 +1,3165 @@
+{
+  "cases": {
+    "v2_better_learned_refinement": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": 0.0188255959340367,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": 0.06399999999999999,
+        "policy_quality": 0.09961751033456379,
+        "policy_rules": -0.05,
+        "selected_features": -0.05,
+        "train_coverage": 0.0
+      },
+      "delta": 0.08244310626860046,
+      "description": "Learn extra feature and minimal rule conditions from planner-labelled states of the five training instances",
+      "kind": "better",
+      "metrics": {
+        "avg_applicable_successors": 1.0,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.0,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 1.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.0,
+        "policy_quality": 1.0,
+        "policy_rules": 5.0,
+        "selected_features": 4.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_better_learned_refinement",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_better_learned_refinement",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.9518163510365412,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.6999999999999993
+    },
+    "v2_reference_seed_0": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": -0.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": -0.0,
+        "policy_quality": 0.0,
+        "policy_rules": -0.0,
+        "selected_features": -0.0,
+        "train_coverage": 0.0
+      },
+      "delta": 0.0,
+      "description": "Full GENEX + WRAPPER relearning with Python and hash seed 0",
+      "kind": "reference",
+      "metrics": {
+        "avg_applicable_successors": 1.1903731746890212,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.376511918680734,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 2.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.64,
+        "policy_quality": 0.9003824896654362,
+        "policy_rules": 4.0,
+        "selected_features": 3.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_reference_seed_0",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_reference_seed_0",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 7.477203520014882,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.6175568937313987
+    },
+    "v2_reference_seed_1": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": -0.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": -0.0,
+        "policy_quality": 0.0,
+        "policy_rules": -0.0,
+        "selected_features": -0.0,
+        "train_coverage": 0.0
+      },
+      "delta": 0.0,
+      "description": "Full GENEX + WRAPPER relearning with Python and hash seed 1",
+      "kind": "reference",
+      "metrics": {
+        "avg_applicable_successors": 1.1903731746890212,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.376511918680734,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 2.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.64,
+        "policy_quality": 0.9003824896654362,
+        "policy_rules": 4.0,
+        "selected_features": 3.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_reference_seed_1",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_reference_seed_1",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 6.23714399302844,
+        "seed": 1,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.6175568937313987
+    },
+    "v2_reference_seed_2": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": -0.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": -0.0,
+        "policy_quality": 0.0,
+        "policy_rules": -0.0,
+        "selected_features": -0.0,
+        "train_coverage": 0.0
+      },
+      "delta": 0.0,
+      "description": "Full GENEX + WRAPPER relearning with Python and hash seed 2",
+      "kind": "reference",
+      "metrics": {
+        "avg_applicable_successors": 1.1903731746890212,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.376511918680734,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 2.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.64,
+        "policy_quality": 0.9003824896654362,
+        "policy_rules": 4.0,
+        "selected_features": 3.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_reference_seed_2",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_reference_seed_2",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 4.060279761906713,
+        "seed": 2,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.6175568937313987
+    },
+    "v2_shortcut_baseline_artifact": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Disable and corrupt both visible baselines; submit an empty policy",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_baseline_artifact",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_baseline_artifact",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.6067915629828349,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (rules must be a non-empty list)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_copied_baseline": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.15,
+        "hard_instance_coverage": -0.22222222222222224,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -0.5,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.12
+      },
+      "delta": -5.5597791159536225,
+      "description": "Copy the visible plan-projection artifact without running a learner",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.5,
+        "hard_instance_coverage": 0.4444444444444444,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.5,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.6
+      },
+      "name": "v2_shortcut_copied_baseline",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_copied_baseline",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.788758401060477,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): does not solve every instance (17 undefined)"
+      },
+      "weighted_score": -2.9422222222222216
+    },
+    "v2_shortcut_empty_output": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Empty constant artifact: zero features and zero rules",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_empty_output",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_empty_output",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.4842314650304615,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (rules must be a non-empty list)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_fixed_feature": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Replace data-side n_balls_at_a by planner distance; emit a one-feature one-rule policy",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_fixed_feature",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_fixed_feature",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.905262473039329,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): does not solve every instance (31 undefined)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_forged_scores": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Empty policy plus forged scores, flags, timings, and metrics after public evaluation",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_forged_scores",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_forged_scores",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.8692402299493551,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "post_train": {
+            "command": [
+              "/usr/local/bin/python",
+              "/home/user/redteam/v2_shortcut_forged_scores/post_train.py"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (rules must be a non-empty list)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_handwritten_optimal": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": 0.0188255959340367,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": 0.06399999999999999,
+        "policy_quality": 0.09961751033456379,
+        "policy_rules": -0.05,
+        "selected_features": -0.05,
+        "train_coverage": 0.0
+      },
+      "delta": 0.08244310626860046,
+      "description": "Hand-write full/final-load departure logic without any learning",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 1.0,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.0,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 1.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.0,
+        "policy_quality": 1.0,
+        "policy_rules": 5.0,
+        "selected_features": 4.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_shortcut_handwritten_optimal",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_handwritten_optimal",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.8955986970104277,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.6999999999999993
+    },
+    "v2_shortcut_handwritten_reference": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": -0.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": -0.0,
+        "policy_quality": 0.0,
+        "policy_rules": -0.0,
+        "selected_features": -0.0,
+        "train_coverage": 0.0
+      },
+      "delta": 0.0,
+      "description": "Hand-write four rules without any learning: reference-behaviour shortcut",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 1.1903731746890212,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.376511918680734,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 2.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.64,
+        "policy_quality": 0.9003824896654362,
+        "policy_rules": 4.0,
+        "selected_features": 3.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_shortcut_handwritten_reference",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_handwritten_reference",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.7025375169469044,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.6175568937313987
+    },
+    "v2_shortcut_implicit_planner": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Admit every successor with zero features and one empty-effect rule",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_implicit_planner",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_implicit_planner",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.4032212649472058,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (not structurally terminating: rule 0 entails no feature change)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_impossible_values": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Null feature/rule lists plus NaN quality and negative-infinite timings",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_impossible_values",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_impossible_values",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.9201780029106885,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (selected_features must be a list of feature names)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_mutable_goal_and_size": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Trivialize data-side goals and generators; submit an empty policy",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_mutable_goal_and_size",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_mutable_goal_and_size",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.5832211449742317,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (rules must be a non-empty list)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_no_artifact": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "description": "Emit no policy and try to retain a candidate-written perfect score file",
+      "kind": "shortcut",
+      "name": "v2_shortcut_no_artifact",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_no_artifact",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.349029497941956,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": null
+      }
+    },
+    "v2_shortcut_planner_denominator": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": -0.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": -0.0,
+        "policy_quality": 0.0,
+        "policy_rules": -0.0,
+        "selected_features": -0.0,
+        "train_coverage": 0.0
+      },
+      "delta": 0.0,
+      "description": "Multiply planner length by 100 while reusing reference policy: tie shortcut",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 1.1903731746890212,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.376511918680734,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 2.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.64,
+        "policy_quality": 0.9003824896654362,
+        "policy_rules": 4.0,
+        "selected_features": 3.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_shortcut_planner_denominator",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_planner_denominator",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.7292204429395497,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.6175568937313987
+    },
+    "v2_shortcut_test_answers": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Attempt to obtain held-out demonstrations from the visible data generator; empty fallback if absent",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_test_answers",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_test_answers",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.452155873994343,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (rules must be a non-empty list)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_undercount_features": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Keep reference effects but omit the monotone anchor from selected_features",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_undercount_features",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_undercount_features",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 1.462063865037635,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (rule 0: effects uses unselected feature 'n_balls_at_a')"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_shortcut_unknown_feature": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Invent an optimal-distance feature name and always descend it",
+      "kind": "shortcut",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_shortcut_unknown_feature",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_shortcut_unknown_feature",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 3.2554189669899642,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): invalid policy (unknown feature names: ['optimal_distance'])"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_weaker_lazy_one_ball": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": -0.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": -0.0,
+        "policy_quality": -0.14657543273598206,
+        "policy_rules": -0.0,
+        "selected_features": -0.0,
+        "train_coverage": 0.0
+      },
+      "delta": -0.14657543273598206,
+      "description": "Restrict pickup to empty grippers: one ball per trip",
+      "kind": "weaker",
+      "metrics": {
+        "avg_applicable_successors": 1.0,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.376511918680734,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 1.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.64,
+        "policy_quality": 0.7538070569294542,
+        "policy_rules": 4.0,
+        "selected_features": 3.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_weaker_lazy_one_ball",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_weaker_lazy_one_ball",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.700872253975831,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.4709814609954166
+    },
+    "v2_weaker_no_pick": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.2,
+        "avg_plan_length_ratio": -0.08117440406596331,
+        "capacity_shift_coverage": -0.3,
+        "hard_instance_coverage": -0.4,
+        "initial_state_shift_coverage": -0.3,
+        "large_instance_coverage": -1.0,
+        "max_effective_width": -0.3,
+        "max_plan_length_ratio": -0.136,
+        "policy_quality": -0.9003824896654362,
+        "policy_rules": -1.8,
+        "selected_features": -0.8500000000000001,
+        "train_coverage": -0.3
+      },
+      "delta": -6.5675568937314,
+      "description": "Ablate the learned pickup rule",
+      "kind": "weaker",
+      "metrics": {
+        "avg_applicable_successors": 3.0,
+        "avg_effective_width": 1.0,
+        "avg_plan_length_ratio": 3.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_applicable_successors": 3.0,
+        "max_effective_width": 1.0,
+        "max_plan_length_ratio": 3.0,
+        "policy_quality": 0.0,
+        "policy_rules": 40.0,
+        "selected_features": 20.0,
+        "train_coverage": 0.0
+      },
+      "name": "v2_weaker_no_pick",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_weaker_no_pick",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.7044489559484646,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): does not solve every instance (31 undefined)"
+      },
+      "weighted_score": -3.9499999999999997
+    },
+    "v2_weaker_redundant_feature": {
+      "baselines": {
+        "admit_all_legal": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "one_step_imitation": {
+          "delta": -6.567556893731398,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.0,
+            "hard_instance_coverage": 0.0,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.0,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.0
+          },
+          "weighted_score": -3.9499999999999997
+        },
+        "plan_projection": {
+          "delta": -5.559779115953621,
+          "metrics": {
+            "avg_applicable_successors": 3.0,
+            "avg_effective_width": 1.0,
+            "avg_plan_length_ratio": 3.0,
+            "capacity_shift_coverage": 0.5,
+            "hard_instance_coverage": 0.4444444444444444,
+            "initial_state_shift_coverage": 0.0,
+            "large_instance_coverage": 0.5,
+            "max_applicable_successors": 3.0,
+            "max_effective_width": 1.0,
+            "max_plan_length_ratio": 3.0,
+            "policy_quality": 0.0,
+            "policy_rules": 40.0,
+            "selected_features": 20.0,
+            "train_coverage": 0.6
+          },
+          "weighted_score": -2.9422222222222216
+        }
+      },
+      "contributions": {
+        "avg_effective_width": -0.0,
+        "avg_plan_length_ratio": -0.0,
+        "capacity_shift_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "max_effective_width": -0.0,
+        "max_plan_length_ratio": -0.0,
+        "policy_quality": 0.0,
+        "policy_rules": -0.0,
+        "selected_features": -0.05,
+        "train_coverage": 0.0
+      },
+      "delta": -0.05,
+      "description": "Same trajectories with a redundant fourth selected feature",
+      "kind": "weaker",
+      "metrics": {
+        "avg_applicable_successors": 1.1903731746890212,
+        "avg_effective_width": 0.0,
+        "avg_plan_length_ratio": 1.376511918680734,
+        "capacity_shift_coverage": 1.0,
+        "hard_instance_coverage": 1.0,
+        "initial_state_shift_coverage": 1.0,
+        "large_instance_coverage": 1.0,
+        "max_applicable_successors": 2.0,
+        "max_effective_width": 0.0,
+        "max_plan_length_ratio": 1.64,
+        "policy_quality": 0.9003824896654362,
+        "policy_rules": 4.0,
+        "selected_features": 4.0,
+        "train_coverage": 1.0
+      },
+      "name": "v2_weaker_redundant_feature",
+      "run": {
+        "candidate_inputs": "visible sources plus trained improve-mode policy only",
+        "case": "v2_weaker_redundant_feature",
+        "evaluator_hashes": {
+          "eval/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/evaluate_gripper.py": "17bfab8bee6bdc6011beb3a031cd72e513e86470c342f2c0d3e7d1e4682fb911",
+          "eval/test/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/test/evaluate_gripper.py": "2edaf669f3c0254489265f58760d4679ae07d2d6df483ecfad62aff3ce667051",
+          "eval/train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "eval/train/evaluate_gripper.py": "8ee0371ddee7863fdf82a5abdeb9dd429ae2d55aef99b0400b24f4cb3ad7e95a",
+          "scripts/evaluate_test.sh": "201afced8cba1c8bc047f1a3103c8457d3efba8c9f82a98f0b91a225521c421e"
+        },
+        "evaluator_unchanged": true,
+        "fresh_test_process": true,
+        "restored": true,
+        "seconds": 0.7037911718944088,
+        "seed": 0,
+        "stages": {
+          "method": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "method.audit_candidate"
+            ],
+            "returncode": 0
+          },
+          "test": {
+            "command": [
+              "bash",
+              "scripts/evaluate_test.sh"
+            ],
+            "returncode": 0
+          },
+          "train": {
+            "command": [
+              "bash",
+              "scripts/evaluate_train.sh"
+            ],
+            "returncode": 0
+          }
+        },
+        "test_command": "bash scripts/evaluate_test.sh",
+        "test_status": "[test] candidate (outputs/candidate/policy.json): solves every instance"
+      },
+      "weighted_score": 2.5675568937313984
+    }
+  },
+  "coefficients": {
+    "avg_effective_width": -0.2,
+    "avg_plan_length_ratio": -0.05,
+    "capacity_shift_coverage": 0.3,
+    "hard_instance_coverage": 0.4,
+    "initial_state_shift_coverage": 0.3,
+    "large_instance_coverage": 1.0,
+    "max_effective_width": -0.3,
+    "max_plan_length_ratio": -0.1,
+    "policy_quality": 1.0,
+    "policy_rules": -0.05,
+    "selected_features": -0.05,
+    "train_coverage": 0.3
+  },
+  "formula": "experiment_weight * sum(coefficient * (candidate - reference))",
+  "reference_matches_supplied": true,
+  "reference_metrics": {
+    "avg_applicable_successors": 1.1903731746890212,
+    "avg_effective_width": 0.0,
+    "avg_plan_length_ratio": 1.376511918680734,
+    "capacity_shift_coverage": 1.0,
+    "hard_instance_coverage": 1.0,
+    "initial_state_shift_coverage": 1.0,
+    "large_instance_coverage": 1.0,
+    "max_applicable_successors": 2.0,
+    "max_effective_width": 0.0,
+    "max_plan_length_ratio": 1.64,
+    "policy_quality": 0.9003824896654362,
+    "policy_rules": 4.0,
+    "selected_features": 3.0,
+    "train_coverage": 1.0
+  },
+  "reference_weighted_score": 2.6175568937313987,
+  "seed_scores": [
+    2.6175568937313987,
+    2.6175568937313987,
+    2.6175568937313987
+  ],
+  "seed_spread": 0.0,
+  "weight": 1.0
+}
