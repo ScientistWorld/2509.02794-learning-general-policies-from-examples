@@ -1,4 +1,3 @@
-action: submit
-gpus: 0
-test: false
-notes: "Run 22-case hardened-gym audit: three reference seeds, learned refinement, weaker variants, and isolated shortcuts through the unchanged no-argument hidden test."
+action: done
+milestone: core_claim
+notes: "Audit complete and committed: learned refinement +0.082443, weaker variants lower, three-seed spread 0; 15 shortcuts tested, hand-written policies pay and a neutral mutation ties. See REDTEAM.md. Original gym files restored."
