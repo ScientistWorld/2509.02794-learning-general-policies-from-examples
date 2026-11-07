@@ -1,0 +1,20 @@
+{
+  "all_15_runs_restored": true,
+  "all_evaluators_unchanged": true,
+  "audited_sources_restored_to_revision": true,
+  "job_exit_code": 0,
+  "job_id": "2ab5a5d9-b77",
+  "report_links_exist": true,
+  "restored_scopes": [
+    "scripts",
+    "data",
+    "baseline",
+    "method",
+    "eval",
+    "scoring",
+    "briefing",
+    "environment/setup.sh",
+    "environment/container.def"
+  ],
+  "source_revision": "8b6f797"
+}
