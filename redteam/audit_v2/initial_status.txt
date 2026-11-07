@@ -1,0 +1,7 @@
+D  README.md
+ M action.yaml
+D  manifest.json
+ D trajectory/session.json
+ D trajectory/turn_0001_raw.jsonl
+ D trajectory/turn_0002_raw.jsonl
+?? redteam/audit_v2/

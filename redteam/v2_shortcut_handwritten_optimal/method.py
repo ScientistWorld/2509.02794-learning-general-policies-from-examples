@@ -1,0 +1,9 @@
+from method.audit_support import write_policy
+# Shortcut: the answer is a literal policy; no demonstrations are consumed.
+write_policy({'selected_features': ['at_a', 'm_carried', 'n_balls_at_a', 'space_in_gripper'], 'rules': [
+    {'condition': [], 'effects': [['m_carried', 'up'], ['n_balls_at_a', 'down'], ['space_in_gripper', 'down']]},
+    {'condition': [['m_carried', '1'], ['space_in_gripper', '0']], 'effects': [['at_a', 'false']]},
+    {'condition': [['m_carried', '1'], ['n_balls_at_a', '0']], 'effects': [['at_a', 'false']]},
+    {'condition': [], 'effects': [['m_carried', 'down'], ['space_in_gripper', 'up']]},
+    {'condition': [['m_carried', '0']], 'effects': [['at_a', 'true']]},
+]})

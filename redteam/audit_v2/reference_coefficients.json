@@ -1,0 +1,127 @@
+{
+  "experiments": {
+    "gripper_generalization": {
+      "description": "Gripper domain policy learning and larger-instance generalization. Paper reports Gripper in Table 1 and large-instance coverage/effective width in Table 3.",
+      "notes": "Paper-reported values (Tables 1 and 3, Gripper row): large_instance_coverage 100%, effective width 0 (max and avg), 3 selected features, 4 rules, 6,154-feature pool, 1 outer and 1 inner WRAPPER iteration, |H| = 38; train_coverage 1.0 because WRAPPER only returns policies that solve the training set. policy_quality = 1.0 is NOT a number the paper reports: it is the gym's ideal anchor (every large instance solved and every policy trajectory as short as an optimal plan). The paper's own 4-rule Gripper policy also admits trajectories that leave room A with a single ball, so its faithful reproduction scores below this anchor. Scaled setup: hand-coded abstract Gripper with standard STRIPS dynamics (move always legal, pick/drop in either room), a 127-feature named pool instead of the 6,154-feature DLPLAN pool, and evaluator-generated held-out suites (larger sizes, unseen capacities, unseen initial states). Coverage follows the paper's definition of solving: every maximal policy trajectory must be finite and end in a goal state; policies must be structurally terminating (k-stratified, k <= 2) or the run is scored as failed. hard/capacity/initial-state coverage, plan-length ratios and successor counts are gym-derived and have no paper value. feature_pool, inner_iterations, outer_iterations and hit_constraints are paper diagnostics only: the evaluator never reads method-reported numbers, so they are not scored.",
+      "weight": 1.0,
+      "primary_metric": "policy_quality",
+      "metrics": {
+        "policy_quality": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "IPC-style quality on the large held-out instances: mean of optimal plan length divided by the expected length of a policy trajectory when an executor picks uniformly among admitted successors (an unsolved instance contributes 0). Set to 0 unless the policy solves every instance of the slice."
+        },
+        "large_instance_coverage": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Fraction of larger Gripper instances the policy solves (every maximal policy trajectory reaches the goal)."
+        },
+        "hard_instance_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.4,
+          "description": "Coverage on the larger half of the large held-out instances."
+        },
+        "capacity_shift_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on instances with gripper capacities never seen in the learning instances."
+        },
+        "initial_state_shift_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on instances whose initial state differs from the learning instances (robot in room B, balls already in B, balls already held)."
+        },
+        "train_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on the five small learning instances, guarding against methods that abandon the original task."
+        },
+        "max_effective_width": {
+          "higher_is_better": false,
+          "coefficient": -0.3,
+          "description": "0 when the rules select a successor at every reachable non-goal state of every large instance (a direct policy, width 0), 1 if search would be needed somewhere. Pinned to 1 when the policy fails the slice."
+        },
+        "avg_effective_width": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Largest per-instance fraction of reachable non-goal states where the rules select no successor (search needed). Pinned to 1 when the policy fails the slice."
+        },
+        "max_applicable_successors": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic: largest number of legal successors admitted at a reachable non-goal state. Not scored: admitting extra successors only matters through coverage and plan length, which are scored."
+        },
+        "avg_applicable_successors": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic: mean number of legal successors admitted across reachable non-goal states. Not scored (see max_applicable_successors)."
+        },
+        "selected_features": {
+          "higher_is_better": false,
+          "coefficient": -0.05,
+          "description": "Number of selected features in the policy artifact (capped at 20; pinned to 20 when the policy fails the slice)."
+        },
+        "policy_rules": {
+          "higher_is_better": false,
+          "coefficient": -0.05,
+          "description": "Number of rules in the policy artifact (capped at 40; pinned to 40 when the policy fails the slice)."
+        },
+        "max_plan_length_ratio": {
+          "higher_is_better": false,
+          "coefficient": -0.1,
+          "description": "Worst case over held-out instances of the longest policy trajectory divided by the optimal plan length (capped at 3; pinned to 3 when the policy fails the slice)."
+        },
+        "avg_plan_length_ratio": {
+          "higher_is_better": false,
+          "coefficient": -0.05,
+          "description": "Mean over held-out instances of the longest policy trajectory divided by the optimal plan length (capped at 3; pinned to 3 when the policy fails the slice)."
+        },
+        "feature_pool": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (size of the candidate feature pool). Not computed or scored by the evaluator."
+        },
+        "inner_iterations": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (WRAPPER inner-loop iterations). Not computed or scored by the evaluator."
+        },
+        "outer_iterations": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (WRAPPER outer-loop iterations). Not computed or scored by the evaluator."
+        },
+        "hit_constraints": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (size of the hitting-set problem). Not computed or scored by the evaluator."
+        }
+      },
+      "results": {
+        "genex_wrapper": {
+          "type": "proposed",
+          "policy_quality": 1.0,
+          "large_instance_coverage": 1.0,
+          "train_coverage": 1.0,
+          "max_effective_width": 0.0,
+          "avg_effective_width": 0.0,
+          "selected_features": 3.0,
+          "policy_rules": 4.0,
+          "feature_pool": 6154.0,
+          "inner_iterations": 1.0,
+          "outer_iterations": 1.0,
+          "hit_constraints": 38.0
+        },
+        "one_step_imitation": {
+          "type": "baseline"
+        },
+        "plan_projection": {
+          "type": "baseline"
+        },
+        "admit_all_legal": {
+          "type": "baseline"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "v2_reference_seed_0",
+    "kind": "reference",
+    "description": "Full GENEX + WRAPPER relearning with Python and hash seed 0"
+  },
+  {
+    "name": "v2_reference_seed_1",
+    "kind": "reference",
+    "description": "Full GENEX + WRAPPER relearning with Python and hash seed 1"
+  },
+  {
+    "name": "v2_reference_seed_2",
+    "kind": "reference",
+    "description": "Full GENEX + WRAPPER relearning with Python and hash seed 2"
+  },
+  {
+    "name": "v2_better_learned_refinement",
+    "kind": "better",
+    "description": "Learn extra feature and minimal rule conditions from planner-labelled states of the five training instances"
+  },
+  {
+    "name": "v2_weaker_no_pick",
+    "kind": "weaker",
+    "description": "Ablate the learned pickup rule"
+  },
+  {
+    "name": "v2_weaker_lazy_one_ball",
+    "kind": "weaker",
+    "description": "Restrict pickup to empty grippers: one ball per trip"
+  },
+  {
+    "name": "v2_weaker_redundant_feature",
+    "kind": "weaker",
+    "description": "Same trajectories with a redundant fourth selected feature"
+  },
+  {
+    "name": "v2_shortcut_handwritten_reference",
+    "kind": "shortcut",
+    "description": "Hand-write four rules without any learning: reference-behaviour shortcut"
+  },
+  {
+    "name": "v2_shortcut_handwritten_optimal",
+    "kind": "shortcut",
+    "description": "Hand-write full/final-load departure logic without any learning"
+  },
+  {
+    "name": "v2_shortcut_forged_scores",
+    "kind": "shortcut",
+    "description": "Empty policy plus forged scores, flags, timings, and metrics after public evaluation"
+  },
+  {
+    "name": "v2_shortcut_implicit_planner",
+    "kind": "shortcut",
+    "description": "Admit every successor with zero features and one empty-effect rule"
+  },
+  {
+    "name": "v2_shortcut_empty_output",
+    "kind": "shortcut",
+    "description": "Empty constant artifact: zero features and zero rules"
+  },
+  {
+    "name": "v2_shortcut_impossible_values",
+    "kind": "shortcut",
+    "description": "Null feature/rule lists plus NaN quality and negative-infinite timings"
+  },
+  {
+    "name": "v2_shortcut_undercount_features",
+    "kind": "shortcut",
+    "description": "Keep reference effects but omit the monotone anchor from selected_features"
+  },
+  {
+    "name": "v2_shortcut_fixed_feature",
+    "kind": "shortcut",
+    "description": "Replace data-side n_balls_at_a by planner distance; emit a one-feature one-rule policy"
+  },
+  {
+    "name": "v2_shortcut_unknown_feature",
+    "kind": "shortcut",
+    "description": "Invent an optimal-distance feature name and always descend it"
+  },
+  {
+    "name": "v2_shortcut_mutable_goal_and_size",
+    "kind": "shortcut",
+    "description": "Trivialize data-side goals and generators; submit an empty policy"
+  },
+  {
+    "name": "v2_shortcut_planner_denominator",
+    "kind": "shortcut",
+    "description": "Multiply planner length by 100 while reusing reference policy: tie shortcut"
+  },
+  {
+    "name": "v2_shortcut_baseline_artifact",
+    "kind": "shortcut",
+    "description": "Disable and corrupt both visible baselines; submit an empty policy"
+  },
+  {
+    "name": "v2_shortcut_test_answers",
+    "kind": "shortcut",
+    "description": "Attempt to obtain held-out demonstrations from the visible data generator; empty fallback if absent"
+  },
+  {
+    "name": "v2_shortcut_copied_baseline",
+    "kind": "shortcut",
+    "description": "Copy the visible plan-projection artifact without running a learner"
+  },
+  {
+    "name": "v2_shortcut_no_artifact",
+    "kind": "shortcut",
+    "description": "Emit no policy and try to retain a candidate-written perfect score file"
+  }
+]
