@@ -55,5 +55,21 @@
   - seed spread 0.
   See `HARDENING.md`.
 
+### [2026-11-07] - core_claim (hardening, iteration 12)
+- Added a second experiment, `childsnack_generalization`: the paper's domain
+  where its learned policy falls short (Table 3: 41.7%).
+  - Same GENEX + WRAPPER method; S1 fails and WRAPPER switches to S2, as in the
+    paper.
+  - Hidden test: the reference solves 19/36 held-out instances, with max
+    effective width 1 (paper: 1.00).
+- CPU job `93d0d57e-ed2` passed `validate.py`. Audit results:
+  - learned Childsnack improvements +0.0525 and +0.0282;
+  - weaker variants -0.46 and -0.87;
+  - all Childsnack shortcuts fail;
+  - Gripper ordering unchanged;
+  - seed spread 0.
+- Open issue: the hand-written Gripper policy still ties the learned refinement.
+  This is a provenance issue left to the grader. See `HARDENING.md`.
+
 ## Stop Justification
 - Completed at milestone `core_claim`.

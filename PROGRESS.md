@@ -59,12 +59,33 @@
     worst-case plan ratio 1.64, 3 features / 4 rules;
   - `plan_projection` baseline: 50% large coverage.
 
+## Hardening (iteration 12)
+
+- Added `childsnack_generalization` (weight 0.5, Gripper 0.5).
+  - The domain is the paper's Childsnack, where the learned policy falls short.
+    It has ten 3-children training instances, real dead ends and a
+    148-feature pool.
+  - Evaluators `eval/{train,test}/evaluate_childsnack.py` are self-contained.
+  - Hidden suites: size, resource surplus, shifted initial situation.
+- The WRAPPER loop is domain-generic; Gripper behaviour is unchanged.
+- Results of job `93d0d57e-ed2`:
+  - Childsnack reference: 19/36 held-out on the hidden test, 21/36 on the
+    visible slice;
+  - learned variants that add training-reachable starts rank higher
+    (+0.0525, +0.0282);
+  - weaker variants and every shortcut rank lower;
+  - `validate.py` passed.
+  Details in `HARDENING.md`.
+- The audit harness (`redteam/hardening_v3/`) runs as part of `scripts/run.sh`
+  (about 50 min on one CPU).
+
 ## Remaining
 
-- The packaged environment is complete for the Gripper core-claim gym: method,
-  evaluation, scoring targets, constraints, and end-to-end scripts are present.
-- Optional future work: add another solved paper domain such as Delivery or
-  Ferry, or port the benchmark to DLPLAN/TARSKI.
+- The packaged environment is complete for both experiments: method,
+  evaluation, scoring targets, constraints, audit and end-to-end scripts are
+  present.
+- Optional future work: more paper domains (Delivery, Ferry), or a port to
+  DLPLAN/TARSKI so the feature pool can grow.
 
 ## Issues
 

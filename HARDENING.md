@@ -1,4 +1,133 @@
-# Hardening Report — Gripper generalized-policy gym (paper 2509.02794)
+# Hardening Report — generalized-policy gym (paper 2509.02794)
+
+## Iteration 12: second experiment (Childsnack) and re-audit
+
+**Verdict.** In both experiments, learned improvements score above the
+reference, weaker variants score below it, and every shortcut that edits or
+forges anything is scored as failed. The only shortcut that still pays is the
+known provenance one: a hand-written Gripper policy ties the learned refinement.
+The red-team report (iteration 10) found the gym's headroom small and outside the
+paper's own metric. Childsnack fixes that: it is the domain where the paper's
+learned policy falls short (Table 3: 41.7% coverage). Here the reference solves
+about half of the held-out instances, so there is room on the paper's own
+coverage metric.
+
+All numbers below come from CPU job `93d0d57e-ed2` (exit 0). Its
+`scripts/run.sh` rebuilt the baselines and relearned the reference on both
+domains. It then ran every audit case alone through
+`bash scripts/evaluate_test.sh` with only that case's artifacts on disk,
+regenerated the score files from the reference, and passed
+`python validate.py --post-design --compare`. Harness:
+`redteam/hardening_v3/harness.py`, cases: `redteam/hardening_v3/variants.py`,
+per-case artifacts and scores: `redteam/hardening_v3/cases/`, summary:
+`redteam/hardening_v3/results.json`.
+Rank = Σ_experiments weight × Σ_metrics coefficient × (case − reference),
+weights 0.5 / 0.5, on the hidden test slice.
+
+### What changed
+
+- **New experiment `childsnack_generalization`** (weight 0.5; Gripper drops
+  from 1.0 to 0.5). It has the paper's ten 3-children training instances, an
+  abstract IPC-2014 Childsnack with real dead ends (gluten-free food wasted),
+  and a 148-feature named pool.
+  - **Evaluator:** `eval/{train,test}/evaluate_childsnack.py`, self-contained
+    like the Gripper evaluator. It owns the dynamics, the exact dead-end test,
+    feature semantics, optimal lengths and instances.
+  - **Hidden suites:** 12 instances each for size (4–9 children), resource
+    surplus, and shifted initial situations.
+  - **Scoring:** the same structural-termination gate as Gripper. If a policy
+    does not solve its ten training instances, every non-coverage metric is
+    pinned to its worst value.
+- **Evaluator entry points:** `eval/{train,test}/evaluate.py` scores both
+  domains for every method directory, and `eval/evaluate_default.py` is the
+  default.
+- **Method:** the WRAPPER loop in `method/genex.py` became domain-generic.
+  It is unchanged on Gripper (same 3 features / 4 rules, 1 outer / 1 inner
+  iteration). On Childsnack, strategy S1 fails and it switches to S2, as in the
+  paper's protocol.
+- **Audit harness hardening:**
+  - each learner has a 2400 s timeout and its return code is recorded;
+  - Childsnack variants copy the reference Gripper artifact *before* learning,
+    so a Childsnack learner failure cannot depress the Gripper score.
+
+### Do better results score higher?
+
+Reference relearned with `PYTHONHASHSEED` 0, 1, 2: byte-identical artifacts,
+weighted test score 1.93312 for all three, so the seed spread is **0**. Every
+comparison is paired on the same hidden instances.
+
+Childsnack (Gripper artifact = reference):
+
+| Case | Held-out solved | size / resource / initial-state cov. | quality | rules | Rank |
+|---|---:|---|---:|---:|---:|
+| reference (GENEX + WRAPPER) | 19/36 (0.528) | 1.00 / 0.417 / 0.167 | 0.503 | 15 | **0** |
+| `childsnack_better_greedy_closure` (learned) | 21/36 (0.583) | 1.00 / 0.417 / 0.333 | 0.554 | 21 | **+0.0525** |
+| `childsnack_better_aug_made_k2` (learned) | 20/36 (0.556) | 1.00 / 0.417 / 0.250 | 0.528 | 17 | **+0.0282** |
+| `childsnack_weaker_no_simplification` (learned) | 8/36 (0.222) | 0.583 / 0.083 / 0.000 | 0.222 | 40 (cap) | **−0.4602** |
+| `childsnack_weaker_wasteful_make` (GF guard removed) | 1/36; train 0.5 → pinned | — | 0 | pinned | **−0.8729** |
+
+The two learned improvements keep GENEX + WRAPPER unchanged. They only enlarge
+Q with states reachable in the ten training instances, which `CONSTRAINTS.md`
+allows.
+- `aug_made_k2` adds 2 off-plan states per instance with food already made or
+  the tray moved (fixed seed).
+- `greedy_closure` repeatedly adds the first training-reachable state where the
+  current policy is undefined or steps into a dead end, and relearns. It skips
+  states WRAPPER cannot accommodate (2 rejected, 3 accepted within its 1500 s
+  budget).
+
+Their gains are ordered by size: greedy > fixed sample > reference. Both pay for
+their extra rules through the small compactness coefficients and still come out
+ahead. A third learner, `childsnack_better_all_states`, required closure from
+*every* reachable training state. GENEX found no stratified feature set after
+870 s (job `b1f65488-01e`; record in
+`redteam/hardening_v3/results_job_b1f65488.json`). It is a real limit of the
+fixed pool, not a scoring defect, and is no longer run by default.
+
+Gripper (Childsnack artifact = reference): learned refinement **+0.0412**,
+lazy one-ball **−0.0733**, redundant feature **−0.0250**, no pick **−3.2838**.
+The iteration-11 ordering is preserved; magnitudes are halved by the 0.5 weight.
+
+### Shortcuts
+
+| Shortcut | Result | Rank |
+|---|---|---:|
+| `shortcut_missing_childsnack` (Gripper only) | missing artifact → failed | −0.9743 |
+| `shortcut_childsnack_admit_all` | gate: rule entails no change | −0.9743 |
+| `shortcut_childsnack_forged` (forged scores/fields) | nothing method-written is read → failed | −0.9743 |
+| `shortcut_childsnack_unknown_feature` | not in evaluator pool → failed | −0.9743 |
+| `shortcut_childsnack_unstratified` | gate: no 2-stratified ranking | −0.9743 |
+| `shortcut_gripper_implicit_planner` / `undercount_features` / `unknown_feature` / `impossible_values` | gate / validity → failed | −3.2838 each |
+| `shortcut_gripper_handwritten_optimal` | **ties the learned refinement** | +0.0412 |
+
+The hand-written policy is a correct policy, so an artifact-only score cannot
+tell it from a learned one. `DIRECTION.md` and `CONSTRAINTS.md` forbid
+hand-written or hand-edited policies, and the post-hoc grader must enforce this.
+The same applies to a hand-written Childsnack policy (not built here).
+
+### Reference and baselines (hidden test / visible slice)
+
+- **Gripper:** quality 0.900 / 0.899. Coverage 1 on every suite; 3 features,
+  4 rules.
+- **Childsnack:** held-out coverage 0.528 / 0.583, quality 0.503 / 0.549.
+  12 features, 15 rules; max effective width 1 (the paper also reports 1.00).
+- **Baselines:** on both domains, `one_step_imitation`, `plan_projection` and
+  `admit_all_legal` fail the training task or the gate. Their best result is
+  `plan_projection` at 50% Gripper large-instance coverage.
+
+### What remains open
+
+- **Hand-written policies:** provenance, as above.
+- **Fixed feature pool:** the pool is fixed on both domains. The all-states
+  learner shows that some Childsnack gains need features the pool lacks.
+- **Small learned Childsnack gains:** the gains measured are small
+  (+2 instances out of 36). The remaining headroom (0.42 of held-out coverage,
+  mostly resource-surplus and shifted-start instances) is real but not
+  demonstrated to be reachable within this pool and k ≤ 2.
+
+---
+
+## Iteration 11: Gripper hardening
 
 **Verdict.** Better results now score higher. The genuine refinement beats the
 reference. Every weaker variant scores below it, including the "lazy" policy,
