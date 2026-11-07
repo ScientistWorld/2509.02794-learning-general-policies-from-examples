@@ -1,0 +1,53 @@
+{
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "m_carried",
+          "up"
+        ],
+        [
+          "n_balls_at_a",
+          "any"
+        ]
+      ]
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "m_carried",
+          "down"
+        ],
+        [
+          "n_balls_at_a",
+          "any"
+        ]
+      ]
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "at_a",
+          "true"
+        ]
+      ]
+    },
+    {
+      "condition": [],
+      "effects": [
+        [
+          "at_a",
+          "false"
+        ]
+      ]
+    }
+  ],
+  "selected_features": [
+    "at_a",
+    "m_carried",
+    "n_balls_at_a"
+  ]
+}

@@ -1,7 +1,7 @@
 #!/bin/bash
-# Run the paper's proposed method.
+# Run the paper's proposed method (GENEX + WRAPPER) and score it.
 #
-# This script trains/runs the paper's method using code in method/.
+# Writes outputs/genex_wrapper/policy.json, then runs the default evaluation.
 #
 # Usage:
 #   bash scripts/method.sh

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import dataclass
-from itertools import product
 from pathlib import Path
 import heapq
 import json
@@ -19,7 +19,6 @@ from data.gripper import (
     planner,
     planner_from_state,
     successors,
-    test_instances,
     training_instances,
     transition_change,
     valuation,
@@ -256,6 +255,8 @@ def _rule_change(rule: Rule, feature_name: str) -> str:
         return "up"
     if value in {"down", "false"}:
         return "down"
+    if value == "any":
+        return "any"
     return "same"
 
 
@@ -266,6 +267,8 @@ def _rule_allows_context(rule: Rule, feature_name: str, context_value: str) -> b
 
 def _rules_monotone(feature_name: str, rules: list[Rule]) -> bool:
     changes = {_rule_change(rule, feature_name) for rule in rules}
+    if "any" in changes:
+        changes |= {"up", "down"}
     return not ("up" in changes and "down" in changes)
 
 
@@ -274,7 +277,8 @@ def _rules_monotone_given(feature_name: str, context_name: str, rules: list[Rule
         subset = [
             rule
             for rule in rules
-            if _rule_change(rule, context_name) == "same" and _rule_allows_context(rule, context_name, context_value)
+            if _rule_change(rule, context_name) in {"same", "any"}
+            and _rule_allows_context(rule, context_name, context_value)
         ]
         if not _rules_monotone(feature_name, subset):
             return False
@@ -307,7 +311,7 @@ def _avoids_bad(policy: Policy, x_neg: list[Transition]) -> bool:
 
 
 def _solves(policy: Policy, instances: list[Instance]) -> bool:
-    return all(execute_policy(policy, inst)["solved"] for inst in instances)
+    return all(verify_policy(policy, inst)["solved"] for inst in instances)
 
 
 def simplify_policy(policy: Policy, x_neg: list[Transition], validation_instances: list[Instance]) -> Policy:
@@ -360,24 +364,55 @@ def simplify_policy(policy: Policy, x_neg: list[Transition], validation_instance
     return current
 
 
-def execute_policy(policy: Policy, instance: Instance, max_steps: int = 1000) -> dict[str, object]:
-    state = instance.initial()
-    seen: set[tuple[int, int, bool, int, int]] = set()
-    actions: list[str] = []
-    for _ in range(max_steps):
+def _is_dead_end(state: State) -> bool:
+    try:
+        planner_from_state(state)
+    except RuntimeError:
+        return True
+    return False
+
+
+def verify_policy(policy: Policy, instance: Instance) -> dict[str, object]:
+    """WRAPPER test (Alg. 2, line 7): explore every policy trajectory.
+
+    Returns the first alive state where the policy is undefined (not closed),
+    the first policy transition into a dead end (not safe), or a cycle. A
+    policy solves the instance iff all maximal trajectories reach the goal.
+    """
+    start = instance.initial()
+    states: dict[tuple, State] = {start.key(): start}
+    graph: dict[tuple, list[tuple]] = {}
+    frontier = deque([start])
+    while frontier:
+        state = frontier.popleft()
         if state.is_goal():
-            return {"solved": True, "actions": actions, "reason": "goal"}
-        key = state.key()
-        if key in seen:
-            return {"solved": False, "actions": actions, "reason": "cycle"}
-        seen.add(key)
+            graph[state.key()] = []
+            continue
         candidates = policy_successors(policy, state)
         if not candidates:
-            return {"solved": False, "actions": actions, "reason": "undefined"}
-        chosen = candidates[0]
-        actions.append(chosen.action)
-        state = chosen.target
-    return {"solved": False, "actions": actions, "reason": "max_steps"}
+            return {"solved": False, "reason": "undefined", "state": state}
+        graph[state.key()] = []
+        for transition in candidates:
+            target = transition.target
+            if not target.is_goal() and _is_dead_end(target):
+                return {"solved": False, "reason": "dead_end", "transition": transition}
+            graph[state.key()].append(target.key())
+            if target.key() not in states:
+                states[target.key()] = target
+                frontier.append(target)
+    indegree = {key: 0 for key in graph}
+    for succ in graph.values():
+        for key in succ:
+            indegree[key] += 1
+    order = [key for key, degree in indegree.items() if degree == 0]
+    for key in order:
+        for nxt in graph[key]:
+            indegree[nxt] -= 1
+            if indegree[nxt] == 0:
+                order.append(nxt)
+    if len(order) != len(graph):
+        return {"solved": False, "reason": "cycle"}
+    return {"solved": True, "reason": "goal", "states": len(graph)}
 
 
 def learn_gripper_policy(extra_distractors: int = 120) -> tuple[Policy, dict[str, object]]:
@@ -409,33 +444,24 @@ def learn_gripper_policy(extra_distractors: int = 120) -> tuple[Policy, dict[str
             policy = project_policy(features, selected, x_pos, order)
             failure = None
             for inst in q_prime:
-                result = execute_policy(policy, inst)
+                result = verify_policy(policy, inst)
                 if not result["solved"]:
                     failure = (inst, result)
                     break
             if failure is None:
                 break
             inst, result = failure
-            state = inst.initial()
-            previous_state = state
-            for action in result["actions"]:
-                previous_state = state
-                state = next(t.target for t in successors(state) if t.action == action)
             if result["reason"] == "undefined":
-                repair_plan = planner_from_state(state)
+                # Not closed: add a planner-recommended transition from the state.
+                repair_plan = planner_from_state(result["state"])
                 if not repair_plan:
-                    raise RuntimeError(f"wrapper could not repair undefined state {state}")
+                    raise RuntimeError(f"wrapper could not repair undefined state {result['state']}")
                 x_pos.append(repair_plan[0])
-            elif result["reason"] == "cycle":
-                raise RuntimeError(f"wrapper found a cycle despite GENEX stratification on {inst.name}")
+            elif result["reason"] == "dead_end":
+                # Not safe: the last policy transition into the dead end is bad.
+                x_neg.append(result["transition"])
             else:
-                bad = next(
-                    (t for t in successors(previous_state) if t.target == state),
-                    None,
-                )
-                if bad is None:
-                    raise RuntimeError(f"wrapper could not identify bad transition into {state}")
-                x_neg.append(bad)
+                raise RuntimeError(f"wrapper found a cycle despite GENEX stratification on {inst.name}")
 
         policy = simplify_policy(policy, x_neg, train)
         final_x_pos = x_pos
@@ -443,7 +469,7 @@ def learn_gripper_policy(extra_distractors: int = 120) -> tuple[Policy, dict[str
         final_hit_sets = hit_sets
         final_q_prime = q_prime
 
-        full_results = [execute_policy(policy, inst) for inst in ordered_train]
+        full_results = [verify_policy(policy, inst) for inst in ordered_train]
         failing = next((idx for idx, result in enumerate(full_results) if not result["solved"]), None)
         if failing is None:
             break
@@ -491,50 +517,6 @@ def policy_from_json(path: Path) -> Policy:
         for item in payload["rules"]
     ]
     return Policy(features, rules, [tuple(edge) for edge in payload["order"]], payload["selected_features"])
-
-
-def evaluate_policy(policy: Policy) -> dict[str, float]:
-    train = training_instances()
-    test = test_instances()
-    train_results = [execute_policy(policy, inst) for inst in train]
-    test_results = [execute_policy(policy, inst) for inst in test]
-    train_coverage = sum(r["solved"] for r in train_results) / len(train_results)
-    test_coverage = sum(r["solved"] for r in test_results) / len(test_results)
-    max_plan_ratio = 0.0
-    for inst, result in zip(test, test_results):
-        if result["solved"]:
-            max_plan_ratio = max(max_plan_ratio, len(result["actions"]) / max(1, len(planner(inst))))
-    return {
-        "train_coverage": train_coverage,
-        "large_instance_coverage": test_coverage,
-        "max_effective_width": 0.0 if test_coverage == 1.0 else 1.0,
-        "avg_effective_width": 0.0 if test_coverage == 1.0 else 1.0 - test_coverage,
-        "selected_features": float(len(policy.features)),
-        "policy_rules": float(len(policy.rules)),
-        "max_plan_length_ratio": max_plan_ratio,
-    }
-
-
-def baseline_metrics() -> dict[str, float]:
-    # A deliberately non-general one-step imitation baseline: it repeats only the
-    # first action seen in the training plan, showing why a generalized policy is needed.
-    solved = 0
-    tests = test_instances()
-    for inst in tests:
-        state = inst.initial()
-        if state.balls_at_a > 0 and state.carried < state.capacity:
-            state = next(t.target for t in successors(state) if t.action == "pick")
-        if state.is_goal():
-            solved += 1
-    return {
-        "train_coverage": 0.0,
-        "large_instance_coverage": solved / len(tests),
-        "max_effective_width": 1.0,
-        "avg_effective_width": 1.0,
-        "selected_features": 0.0,
-        "policy_rules": 1.0,
-        "max_plan_length_ratio": 0.0,
-    }
 
 
 def reachable_transition_count(instances: list[Instance]) -> int:

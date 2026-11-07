@@ -1,30 +1,46 @@
 # Evaluation Targets
 
-## Primary: gripper_generalization
+All targets are metrics of the single experiment `gripper_generalization`.
+The evaluator recomputes all of them from the policy artifact.
 
-Tests whether a learned policy solves thirty held-out Gripper instances that are
-larger than the five examples used during learning.
-- **Metric:** `policy_quality` (higher is better), with
-  `large_instance_coverage` as the paper-facing coverage component.
+## Primary: generalization to larger instances
 
-## Robustness: held_out_variants
+Tests whether the policy solves larger held-out Gripper instances (every policy
+trajectory must reach the goal) and how close its trajectories are to optimal.
+- **Metrics:** `policy_quality` (primary, higher is better) and
+  `large_instance_coverage` (paper-facing coverage, higher is better).
 
-Tests whether the policy still works on harder held-out Gripper sizes and on
-capacity variants that use the same transition rules but were not present in the
-five training examples.
-- **Metric:** `hard_instance_coverage` and `capacity_shift_coverage` (higher is
-  better)
+## Robustness: held-out variants
 
-## Constraint: direct_policy_behavior
+Tests the harder half of the large instances, unseen gripper capacities, and
+unseen initial situations, all with the same transition rules.
+- **Metrics:** `hard_instance_coverage`, `capacity_shift_coverage`,
+  `initial_state_shift_coverage` (higher is better).
 
-Tests whether the learned object acts as a direct policy without needing search
-to find a compatible successor.
-- **Metric:** `max_effective_width`, `avg_effective_width`,
-  `max_applicable_successors`, and `avg_applicable_successors` (lower is better)
+## Constraint: training task retained
 
-## Constraint: compact_policy
+- **Metric:** `train_coverage` (higher is better).
 
-Tests whether the solution remains a compact symbolic policy rather than growing
-by memorizing many transitions.
-- **Metric:** `selected_features`, `policy_rules`, and `max_plan_length_ratio`
-  / `avg_plan_length_ratio` (lower is better)
+## Constraint: structural termination (gate)
+
+The rule set must be terminating by its form (k-stratified, k ≤ 2, and every
+rule entails a feature change). A violation scores the run as failed on every
+metric. There is no separate metric.
+
+## Constraint: direct policy behaviour
+
+Tests whether the policy selects a successor at every reachable non-goal state,
+with no search needed.
+- **Metrics:** `max_effective_width`, `avg_effective_width` (lower is better).
+- **Diagnostics (coefficient 0):** `max_applicable_successors`,
+  `avg_applicable_successors`.
+
+## Constraint: compact, efficient policy
+
+Tests whether the policy stays small and avoids admitting needlessly long
+trajectories.
+- **Metrics:** `selected_features`, `policy_rules`, `max_plan_length_ratio`,
+  `avg_plan_length_ratio` (lower is better).
+
+If the policy does not solve every instance of a slice, every metric except the
+coverages is pinned to its worst value.

@@ -1,0 +1,19 @@
+{
+  "order": [],
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "n_balls_at_a",
+          "down"
+        ]
+      ],
+      "source_action": "shortcut_fixed_artifact"
+    }
+  ],
+  "selected_features": [
+    "n_balls_at_a"
+  ],
+  "stats": {}
+}

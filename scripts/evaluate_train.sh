@@ -1,8 +1,9 @@
 #!/bin/bash
 # Visible train-slice evaluation for the Gripper research gym.
 #
-# Mirrors scripts/evaluate.sh: reads method artifacts and writes a scoring JSON.
-# This script does not train or regenerate the method.
+# Scores every policy artifact on disk (outputs/, checkpoints/, method_outputs/)
+# plus the evaluator-owned baselines, and writes scoring/scores_train.json.
+# Does not train or regenerate any method.
 
 set -e
 
@@ -10,4 +11,4 @@ cd /home/user
 
 mkdir -p scoring
 
-python -m eval.train.evaluate_gripper --include-baseline "$@"
+python -m eval.train.evaluate_gripper "$@"

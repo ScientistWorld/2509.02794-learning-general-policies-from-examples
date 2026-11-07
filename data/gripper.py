@@ -1,3 +1,17 @@
+"""Gripper domain for learning generalized policies (method-side resources).
+
+The state abstracts ball and gripper identities away: a robot with `capacity`
+grippers moves between rooms A and B; balls are either in room A, held, or in
+room B. The dynamics follow the standard STRIPS Gripper domain: `move` is always
+applicable, `pick` takes a ball from the robot's current room when a gripper is
+free, and `drop` releases a held ball into the robot's current room. The goal of
+every instance is to have all balls in room B (none in A, none held).
+
+This module provides what a learner may use: the dynamics, a planner that
+returns example plans, the named feature pool, and the five training instances.
+Held-out evaluation instances are not part of this module; the evaluator owns
+its own copy of the dynamics, goal test, feature semantics, and instances.
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -12,6 +26,10 @@ class State:
     at_a: bool
     total_balls: int
     capacity: int = 2
+
+    @property
+    def balls_at_b(self) -> int:
+        return self.total_balls - self.balls_at_a - self.carried
 
     def is_goal(self) -> bool:
         return self.balls_at_a == 0 and self.carried == 0
@@ -52,49 +70,41 @@ class Feature:
         return bool(value) if self.kind == "bool" else int(value) > 0
 
 
-def successors(state: State) -> list[Transition]:
-    out: list[Transition] = []
-    if state.at_a:
-        if state.balls_at_a > 0 and state.carried < state.capacity:
-            out.append(
-                Transition(
-                    state,
-                    State(
-                        state.balls_at_a - 1,
-                        state.carried + 1,
-                        True,
-                        state.total_balls,
-                        state.capacity,
-                    ),
-                    "pick",
-                )
-            )
-        if state.carried > 0:
-            out.append(
-                Transition(
-                    state,
-                    State(state.balls_at_a, state.carried, False, state.total_balls, state.capacity),
-                    "move_to_b",
-                )
-            )
-        return out
+def _replace(state: State, **changes) -> State:
+    values = {
+        "balls_at_a": state.balls_at_a,
+        "carried": state.carried,
+        "at_a": state.at_a,
+        "total_balls": state.total_balls,
+        "capacity": state.capacity,
+    }
+    values.update(changes)
+    return State(**values)
 
-    if state.carried > 0:
+
+def successors(state: State) -> list[Transition]:
+    """All applicable ground actions (up to ball/gripper symmetry)."""
+    out: list[Transition] = []
+    balls_here = state.balls_at_a if state.at_a else state.balls_at_b
+    if balls_here > 0 and state.carried < state.capacity:
+        delta_a = -1 if state.at_a else 0
         out.append(
             Transition(
                 state,
-                State(state.balls_at_a, state.carried - 1, False, state.total_balls, state.capacity),
+                _replace(state, balls_at_a=state.balls_at_a + delta_a, carried=state.carried + 1),
+                "pick",
+            )
+        )
+    if state.carried > 0:
+        delta_a = 1 if state.at_a else 0
+        out.append(
+            Transition(
+                state,
+                _replace(state, balls_at_a=state.balls_at_a + delta_a, carried=state.carried - 1),
                 "drop",
             )
         )
-    if state.carried == 0 and state.balls_at_a > 0:
-        out.append(
-            Transition(
-                state,
-                State(state.balls_at_a, 0, True, state.total_balls, state.capacity),
-                "move_to_a",
-            )
-        )
+    out.append(Transition(state, _replace(state, at_a=not state.at_a), "move_to_b" if state.at_a else "move_to_a"))
     return out
 
 
@@ -113,28 +123,32 @@ def planner(instance: Instance) -> list[Transition]:
 
 
 def planner_from_state(state: State) -> list[Transition]:
+    """Greedy domain planner used to produce example plans.
+
+    Fills the grippers in room A, carries the load to B, empties it, returns.
+    """
     plan: list[Transition] = []
     seen: set[tuple[int, int, bool, int, int]] = set()
     while not state.is_goal():
         if state.key() in seen:
             raise RuntimeError(f"planner looped on {state}")
         seen.add(state.key())
+        by_action = {t.action: t for t in successors(state)}
         if state.at_a and state.balls_at_a > 0 and state.carried < state.capacity:
-            chosen = next(t for t in successors(state) if t.action == "pick")
-        elif state.at_a and state.carried > 0:
-            chosen = next(t for t in successors(state) if t.action == "move_to_b")
-        elif (not state.at_a) and state.carried > 0:
-            chosen = next(t for t in successors(state) if t.action == "drop")
-        elif (not state.at_a) and state.balls_at_a > 0:
-            chosen = next(t for t in successors(state) if t.action == "move_to_a")
+            chosen = by_action["pick"]
+        elif state.at_a:
+            chosen = by_action["move_to_b"]
+        elif state.carried > 0:
+            chosen = by_action["drop"]
         else:
-            raise RuntimeError(f"no plan action from {state}")
+            chosen = by_action["move_to_a"]
         plan.append(chosen)
         state = chosen.target
     return plan
 
 
 def feature_pool(extra_distractors: int = 80) -> list[Feature]:
+    """Named feature pool. The evaluator defines the same names independently."""
     features = [
         Feature("n_balls_at_a", "num", 1, lambda s: s.balls_at_a),
         Feature("m_carried", "num", 1, lambda s: s.carried),
@@ -159,11 +173,8 @@ def feature_pool(extra_distractors: int = 80) -> list[Feature]:
 
 
 def training_instances() -> list[Instance]:
+    """The five small learning instances (1 to 5 balls, two grippers)."""
     return [Instance(f"train_{n}", n) for n in range(1, 6)]
-
-
-def test_instances() -> list[Instance]:
-    return [Instance(f"test_{n}", n) for n in range(6, 36)]
 
 
 def transition_change(feature: Feature, transition: Transition) -> str:
@@ -201,10 +212,6 @@ def effect(feature: Feature, transition: Transition) -> str:
     if change == "=":
         return "same"
     return change
-
-
-def action_plan_baseline(instance: Instance) -> list[str]:
-    return [t.action for t in planner(instance)]
 
 
 def alive_states(instance: Instance) -> Iterable[State]:

@@ -1,195 +1,576 @@
+"""Visible train-slice evaluator for the Gripper generalized-policy gym.
+
+Self-contained by design: this module owns the dynamics, the goal test, the
+semantics of every named feature, optimal plan lengths, the instances, and the
+baseline policies. It imports nothing from `data/`, `method/`, or `eval/test/`,
+so a submission cannot change what it is compared against.
+
+A policy artifact is a JSON object with `selected_features` (names from the
+feature pool) and `rules` (each with `condition` and `effects`). Every other
+field in the artifact is ignored; every scored number is recomputed here.
+
+Semantics (Bonet & Geffner, "Learning General Policies From Examples"):
+- A transition (s, t) is a policy transition if it is compatible with a rule.
+- A policy solves an instance iff every maximal policy trajectory from the
+  initial state is finite and ends in a goal state (closed, safe, acyclic).
+  All admitted successors are explored; no tie-breaking order is used.
+- The rule set must be structurally terminating: every rule entails a feature
+  change and the features admit a k-stratified ranking (k <= 2). A policy that
+  fails this check, or is malformed, scores as failed on every metric.
+- If the policy does not solve every instance of the slice, all non-coverage
+  metrics are pinned to their worst values, so a failing policy never outranks
+  a solving one through compactness or efficiency.
+"""
 from __future__ import annotations
 
 import argparse
 import json
 import re
+from collections import deque
+from itertools import combinations, product
 from pathlib import Path
-
-from data.gripper import Instance, feature_pool, planner, successors, test_instances, training_instances
-
 
 SLICE = "train"
 OUTPUT = "scoring/scores_train.json"
 EXPERIMENT = "gripper_generalization"
 
-
-def _slice_instances():
-    return [instance for index, instance in enumerate(test_instances()) if index % 2 == 0]
-
-
-def _capacity_shift_instances():
-    return [
-        Instance("train_capacity_3_balls_8", 8, capacity=3),
-        Instance("train_capacity_3_balls_14", 14, capacity=3),
-        Instance("train_capacity_4_balls_20", 20, capacity=4),
-    ]
+# ---------------------------------------------------------------------------
+# Instances: (name, balls, capacity, balls_at_a, carried, robot_at_a)
+# ---------------------------------------------------------------------------
 
 
-def _valuation(feature, state) -> str:
-    return "1" if feature.positive(state) else "0"
+def _standard(name: str, balls: int, capacity: int = 2) -> tuple:
+    return (name, balls, capacity, balls, 0, True)
 
 
-def _effect(feature, transition) -> str:
-    before = feature.value(transition.source)
-    after = feature.value(transition.target)
-    if feature.kind == "bool":
-        if bool(before) == bool(after):
-            return "same"
-        return "true" if bool(after) else "false"
-    if int(after) > int(before):
-        return "up"
-    if int(after) < int(before):
-        return "down"
-    return "same"
+TRAIN_INSTANCES = [_standard(f"learn_{n}", n) for n in range(1, 6)]
+LARGE_INSTANCES = [
+    _standard(f"large_{n}", n)
+    for n in [6, 9, 10, 13, 14, 17, 18, 21, 22, 25, 26, 29, 30, 33, 34, 41, 47, 56]
+]
+CAPACITY_INSTANCES = [
+    _standard("capacity_3_balls_8", 8, 3),
+    _standard("capacity_3_balls_14", 14, 3),
+    _standard("capacity_4_balls_20", 20, 4),
+    _standard("capacity_5_balls_27", 27, 5),
+]
+INITIAL_STATE_INSTANCES = [
+    ("init_12_robot_b_mixed", 12, 2, 7, 1, False),
+    ("init_16_robot_b_all_a", 16, 2, 16, 0, False),
+    ("init_19_cap3_holding", 19, 3, 10, 2, True),
+    ("init_25_cap2_only_held", 25, 2, 0, 2, True),
+]
+
+# Pinned values for failed or invalid runs (worst value of each metric).
+WORST_SUCCESSORS = 3.0  # pick, drop, move: the most legal actions at any state
+PLAN_RATIO_CAP = 3.0
+FEATURE_CAP = 20.0
+RULE_CAP = 40.0
+MAX_SELECTED_FEATURES = 32
+MAX_RULES = 128
+STRATIFICATION_K = 2
+
+# ---------------------------------------------------------------------------
+# Dynamics. State = (balls_at_a, carried, robot_at_a, total, capacity)
+# ---------------------------------------------------------------------------
 
 
-def _matches(rule: dict, transition, features_by_name: dict) -> bool:
-    for name, expected in rule["condition"]:
-        if _valuation(features_by_name[name], transition.source) != expected:
-            return False
-    effects = dict(rule["effects"])
-    for name, feature in features_by_name.items():
-        expected = effects.get(name, "same")
-        if expected == "any":
-            continue
-        if _effect(feature, transition) != expected:
-            return False
-    return True
+def _initial(spec: tuple) -> tuple:
+    _, balls, capacity, at_a, carried, robot_at_a = spec
+    return (at_a, carried, robot_at_a, balls, capacity)
 
 
-def _execute(policy: dict, instance, max_steps: int = 1000) -> dict:
-    all_features = {feature.name: feature for feature in feature_pool(120)}
-    selected = {name: all_features[name] for name in policy["selected_features"]}
-    state = instance.initial()
-    seen = set()
-    actions = []
-    branch_counts = []
-    for _ in range(max_steps):
-        if state.is_goal():
-            return {"solved": True, "actions": actions, "reason": "goal", "branch_counts": branch_counts}
-        if state.key() in seen:
-            return {"solved": False, "actions": actions, "reason": "cycle", "branch_counts": branch_counts}
-        seen.add(state.key())
-        candidates = [
-            transition
-            for transition in successors(state)
-            if any(_matches(rule, transition, selected) for rule in policy["rules"])
-        ]
-        branch_counts.append(len(candidates))
-        if not candidates:
-            return {"solved": False, "actions": actions, "reason": "undefined", "branch_counts": branch_counts}
-        chosen = candidates[0]
-        actions.append(chosen.action)
-        state = chosen.target
-    return {"solved": False, "actions": actions, "reason": "max_steps", "branch_counts": branch_counts}
+def _is_goal(state: tuple) -> bool:
+    return state[0] == 0 and state[1] == 0
 
 
-def _coverage(results: list[dict]) -> float:
-    return sum(result["solved"] for result in results) / len(results)
+def _successors(state: tuple) -> list[tuple]:
+    at_a, carried, robot_at_a, total, capacity = state
+    at_b = total - at_a - carried
+    out = []
+    here = at_a if robot_at_a else at_b
+    if here > 0 and carried < capacity:
+        out.append((at_a - 1 if robot_at_a else at_a, carried + 1, robot_at_a, total, capacity))
+    if carried > 0:
+        out.append((at_a + 1 if robot_at_a else at_a, carried - 1, robot_at_a, total, capacity))
+    out.append((at_a, carried, not robot_at_a, total, capacity))
+    return out
 
 
-def _hard_instances(instances):
-    threshold = sorted(instance.balls for instance in instances)[len(instances) // 2]
-    return [instance for instance in instances if instance.balls >= threshold]
+def _optimal_length(start: tuple) -> int:
+    if _is_goal(start):
+        return 0
+    frontier = deque([start])
+    depth = {start: 0}
+    while frontier:
+        state = frontier.popleft()
+        for nxt in _successors(state):
+            if nxt in depth:
+                continue
+            depth[nxt] = depth[state] + 1
+            if _is_goal(nxt):
+                return depth[nxt]
+            frontier.append(nxt)
+    raise RuntimeError(f"unsolvable instance from {start}")
 
 
-def _branching_metrics(results: list[dict]) -> tuple[float, float]:
-    counts = [count for result in results for count in result["branch_counts"]]
-    if not counts:
-        return 0.0, 0.0
-    return float(max(counts)), sum(counts) / len(counts)
+# ---------------------------------------------------------------------------
+# Feature pool: name -> (kind, function of state)
+# ---------------------------------------------------------------------------
 
 
-def evaluate_policy(policy: dict) -> dict[str, float]:
-    train = training_instances()
-    large = _slice_instances()
-    hard = _hard_instances(large)
-    capacity_shift = _capacity_shift_instances()
-    train_results = [_execute(policy, instance) for instance in train]
-    large_results = [_execute(policy, instance) for instance in large]
-    hard_results = [_execute(policy, instance) for instance in hard]
-    capacity_results = [_execute(policy, instance) for instance in capacity_shift]
-    train_coverage = _coverage(train_results)
-    large_coverage = _coverage(large_results)
-    hard_coverage = _coverage(hard_results)
-    capacity_coverage = _coverage(capacity_results)
-    max_plan_ratio = 0.0
-    plan_ratios = []
-    for instance, result in zip(large, large_results):
-        if result["solved"]:
-            ratio = len(result["actions"]) / max(1, len(planner(instance)))
-            plan_ratios.append(ratio)
-            max_plan_ratio = max(max_plan_ratio, ratio)
-    max_branching, avg_branching = _branching_metrics(large_results + capacity_results)
-    policy_quality = large_coverage - 0.05 * avg_branching
-    return {
-        "policy_quality": policy_quality,
-        "train_coverage": train_coverage,
-        "large_instance_coverage": large_coverage,
-        "hard_instance_coverage": hard_coverage,
-        "capacity_shift_coverage": capacity_coverage,
-        "max_effective_width": 0.0 if large_coverage == 1.0 else 1.0,
-        "avg_effective_width": 0.0 if large_coverage == 1.0 else 1.0 - large_coverage,
-        "max_applicable_successors": max_branching,
-        "avg_applicable_successors": avg_branching,
-        "selected_features": float(len(policy["selected_features"])),
-        "policy_rules": float(len(policy["rules"])),
-        "max_plan_length_ratio": max_plan_ratio,
-        "avg_plan_length_ratio": sum(plan_ratios) / len(plan_ratios) if plan_ratios else 0.0,
+def _build_pool() -> dict:
+    pool = {
+        "n_balls_at_a": ("num", lambda s: s[0]),
+        "m_carried": ("num", lambda s: s[1]),
+        "at_a": ("bool", lambda s: s[2]),
+        "goal": ("bool", lambda s: s[0] == 0 and s[1] == 0),
+        "room_b": ("bool", lambda s: not s[2]),
+        "space_in_gripper": ("num", lambda s: s[4] - s[1]),
+        "remaining_work": ("num", lambda s: s[0] + s[1]),
     }
+    for i in range(120):
+        mod = 2 + (i % 7)
+        offset = i // 7
+        pool[f"distractor_{i:03d}"] = (
+            "num",
+            lambda s, mod=mod, offset=offset: (s[3] * (offset + 1) + s[0]) % mod,
+        )
+    return pool
 
 
-def baseline_metrics() -> dict[str, float]:
-    solved = 0
-    large = _slice_instances()
-    for instance in large:
-        state = instance.initial()
-        if state.balls_at_a > 0 and state.carried < state.capacity:
-            state = next(transition.target for transition in successors(state) if transition.action == "pick")
-        if state.is_goal():
-            solved += 1
-    return {
-        "train_coverage": 0.0,
-        "large_instance_coverage": solved / len(large),
-        "hard_instance_coverage": 0.0,
-        "capacity_shift_coverage": 0.0,
+POOL = _build_pool()
+EFFECTS = {"num": {"up", "down", "same", "any"}, "bool": {"true", "false", "same", "any"}}
+CHANGE_EFFECTS = {"up", "down", "true", "false"}
+
+# ---------------------------------------------------------------------------
+# Policy parsing and structural checks
+# ---------------------------------------------------------------------------
+
+
+class InvalidPolicy(Exception):
+    pass
+
+
+def _parse_condition_value(value) -> str:
+    if isinstance(value, bool):
+        raise InvalidPolicy("condition values must be '0' or '1'")
+    if isinstance(value, int) and value in (0, 1):
+        return str(value)
+    if isinstance(value, str) and value in ("0", "1"):
+        return value
+    raise InvalidPolicy(f"condition value {value!r} is not '0' or '1'")
+
+
+def _parse_pairs(items, selected: set, what: str, rule_index: int) -> list:
+    if not isinstance(items, list):
+        raise InvalidPolicy(f"rule {rule_index}: {what} must be a list")
+    pairs = []
+    seen = set()
+    for item in items:
+        if not isinstance(item, (list, tuple)) or len(item) != 2 or not isinstance(item[0], str):
+            raise InvalidPolicy(f"rule {rule_index}: malformed {what} entry {item!r}")
+        name = item[0]
+        if name not in selected:
+            raise InvalidPolicy(f"rule {rule_index}: {what} uses unselected feature {name!r}")
+        if name in seen:
+            raise InvalidPolicy(f"rule {rule_index}: feature {name!r} repeated in {what}")
+        seen.add(name)
+        pairs.append((name, item[1]))
+    return pairs
+
+
+def parse_policy(payload) -> tuple[list[str], list[tuple[dict, dict]]]:
+    if not isinstance(payload, dict):
+        raise InvalidPolicy("policy artifact must be a JSON object")
+    features = payload.get("selected_features")
+    rules = payload.get("rules")
+    if not isinstance(features, list) or not all(isinstance(name, str) for name in features):
+        raise InvalidPolicy("selected_features must be a list of feature names")
+    if len(set(features)) != len(features):
+        raise InvalidPolicy("selected_features contains duplicates")
+    if len(features) > MAX_SELECTED_FEATURES:
+        raise InvalidPolicy(f"more than {MAX_SELECTED_FEATURES} selected features")
+    unknown = [name for name in features if name not in POOL]
+    if unknown:
+        raise InvalidPolicy(f"unknown feature names: {unknown[:5]}")
+    if not isinstance(rules, list) or not rules:
+        raise InvalidPolicy("rules must be a non-empty list")
+    if len(rules) > MAX_RULES:
+        raise InvalidPolicy(f"more than {MAX_RULES} rules")
+    selected = set(features)
+    parsed = []
+    for index, rule in enumerate(rules):
+        if not isinstance(rule, dict):
+            raise InvalidPolicy(f"rule {index} must be an object")
+        condition = {
+            name: _parse_condition_value(value)
+            for name, value in _parse_pairs(rule.get("condition"), selected, "condition", index)
+        }
+        effects = {}
+        for name, value in _parse_pairs(rule.get("effects"), selected, "effects", index):
+            kind = POOL[name][0]
+            if not isinstance(value, str) or value not in EFFECTS[kind]:
+                raise InvalidPolicy(f"rule {index}: effect {value!r} invalid for {kind} feature {name!r}")
+            effects[name] = value
+        parsed.append((condition, effects))
+    return list(features), parsed
+
+
+def _directions(value: str | None) -> set:
+    if value in ("up", "true"):
+        return {"up"}
+    if value in ("down", "false"):
+        return {"down"}
+    if value == "any":
+        return {"up", "down"}
+    return set()
+
+
+def structural_termination(features: list[str], rules: list[tuple[dict, dict]], k: int = STRATIFICATION_K) -> str | None:
+    """Return None if the rule set is k-stratified (Defs. 5 and 8), else a reason.
+
+    `any` effects count as possible increases and decreases for monotonicity,
+    and as possibly-unchanged for the conditioning contexts.
+    """
+    for index, (_, effects) in enumerate(rules):
+        if not any(value in CHANGE_EFFECTS for value in effects.values()):
+            return f"rule {index} entails no feature change"
+    up, down, keeps, allow0, allow1 = {}, {}, {}, {}, {}
+    for f in features:
+        up[f] = down[f] = keeps[f] = allow0[f] = allow1[f] = 0
+        for index, (condition, effects) in enumerate(rules):
+            bit = 1 << index
+            dirs = _directions(effects.get(f))
+            if "up" in dirs:
+                up[f] |= bit
+            if "down" in dirs:
+                down[f] |= bit
+            if effects.get(f) in (None, "same", "any"):
+                keeps[f] |= bit
+            if condition.get(f) != "1":
+                allow0[f] |= bit
+            if condition.get(f) != "0":
+                allow1[f] |= bit
+    everything = (1 << len(rules)) - 1
+
+    def monotone(f: str, mask: int) -> bool:
+        return not (up[f] & mask and down[f] & mask)
+
+    ranked = [f for f in features if monotone(f, everything)]
+    pending = [f for f in features if f not in ranked]
+    progress = True
+    while pending and progress:
+        progress = False
+        for f in list(pending):
+            done = False
+            for size in range(1, k + 1):
+                for group in combinations(ranked, size):
+                    ok = True
+                    for values in product((0, 1), repeat=size):
+                        mask = everything
+                        for g, v in zip(group, values):
+                            mask &= keeps[g] & (allow1[g] if v else allow0[g])
+                        if not monotone(f, mask):
+                            ok = False
+                            break
+                    if ok:
+                        done = True
+                        break
+                if done:
+                    break
+            if done:
+                ranked.append(f)
+                pending.remove(f)
+                progress = True
+    if pending:
+        return f"no {k}-stratified ranking for features {pending[:5]}"
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Policy execution over all policy trajectories
+# ---------------------------------------------------------------------------
+
+
+class CompiledPolicy:
+    def __init__(self, features: list[str], rules: list[tuple[dict, dict]]):
+        self.features = features
+        self.kinds = [POOL[f][0] for f in features]
+        self.functions = [POOL[f][1] for f in features]
+        index = {f: i for i, f in enumerate(features)}
+        self.rules = [
+            (
+                [(index[f], v) for f, v in condition.items()],
+                [effects.get(f, "same") for f in features],
+            )
+            for condition, effects in rules
+        ]
+        self._cache: dict = {}
+
+    def _values(self, state: tuple) -> tuple:
+        values = self._cache.get(state)
+        if values is None:
+            values = tuple(fn(state) for fn in self.functions)
+            self._cache[state] = values
+        return values
+
+    def admits(self, source: tuple, target: tuple) -> bool:
+        before = self._values(source)
+        after = self._values(target)
+        changes = []
+        for kind, b, a in zip(self.kinds, before, after):
+            if kind == "bool":
+                changes.append("same" if bool(b) == bool(a) else ("true" if a else "false"))
+            else:
+                changes.append("up" if a > b else ("down" if a < b else "same"))
+        positive = [("1" if (bool(b) if kind == "bool" else b > 0) else "0") for kind, b in zip(self.kinds, before)]
+        for condition, effects in self.rules:
+            if any(positive[i] != v for i, v in condition):
+                continue
+            if all(e == "any" or e == c for e, c in zip(effects, changes)):
+                return True
+        return False
+
+
+def analyze_instance(policy: CompiledPolicy, spec: tuple) -> dict:
+    start = _initial(spec)
+    graph: dict = {}
+    frontier = deque([start])
+    seen = {start}
+    undefined = 0
+    alive = 0
+    branching = []
+    while frontier:
+        state = frontier.popleft()
+        if _is_goal(state):
+            graph[state] = []
+            continue
+        alive += 1
+        admitted = [t for t in _successors(state) if policy.admits(state, t)]
+        graph[state] = admitted
+        branching.append(len(admitted))
+        if not admitted:
+            undefined += 1
+        for nxt in admitted:
+            if nxt not in seen:
+                seen.add(nxt)
+                frontier.append(nxt)
+    # Kahn's algorithm on the reachable policy graph detects cycles.
+    indegree = {s: 0 for s in graph}
+    for s, succ in graph.items():
+        for t in succ:
+            indegree[t] += 1
+    order = [s for s, d in indegree.items() if d == 0]
+    cursor = 0
+    while cursor < len(order):
+        s = order[cursor]
+        cursor += 1
+        for t in graph[s]:
+            indegree[t] -= 1
+            if indegree[t] == 0:
+                order.append(t)
+    acyclic = len(order) == len(graph)
+    solved = acyclic and undefined == 0
+    result = {
+        "solved": solved,
+        "reason": "solved" if solved else ("cycle" if not acyclic else "undefined"),
+        "undefined_fraction": undefined / alive if alive else 0.0,
+        "branching": branching,
+    }
+    if solved:
+        worst: dict = {}
+        expected: dict = {}
+        for s in reversed(order):
+            succ = graph[s]
+            if not succ:
+                worst[s] = 0
+                expected[s] = 0.0
+            else:
+                worst[s] = 1 + max(worst[t] for t in succ)
+                expected[s] = 1.0 + sum(expected[t] for t in succ) / len(succ)
+        optimal = _optimal_length(start)
+        result.update(
+            {
+                "optimal": optimal,
+                "worst_ratio": worst[start] / optimal if optimal else 1.0,
+                "expected_ratio": expected[start] / optimal if optimal else 1.0,
+            }
+        )
+    return result
+
+
+def _hard(instances: list[tuple]) -> list[tuple]:
+    threshold = sorted(spec[1] for spec in instances)[len(instances) // 2]
+    return [spec for spec in instances if spec[1] >= threshold]
+
+
+def _failed_metrics(coverages: dict) -> dict:
+    metrics = {
+        "policy_quality": 0.0,
         "max_effective_width": 1.0,
         "avg_effective_width": 1.0,
-        "max_applicable_successors": 1.0,
-        "avg_applicable_successors": 1.0,
-        "policy_quality": -0.05,
-        "selected_features": 0.0,
-        "policy_rules": 1.0,
-        "max_plan_length_ratio": 0.0,
-        "avg_plan_length_ratio": 0.0,
-        "feature_pool": 0.0,
-        "inner_iterations": 0.0,
-        "outer_iterations": 0.0,
-        "hit_constraints": 0.0,
+        "max_applicable_successors": WORST_SUCCESSORS,
+        "avg_applicable_successors": WORST_SUCCESSORS,
+        "selected_features": FEATURE_CAP,
+        "policy_rules": RULE_CAP,
+        "max_plan_length_ratio": PLAN_RATIO_CAP,
+        "avg_plan_length_ratio": PLAN_RATIO_CAP,
     }
+    metrics.update(coverages)
+    return metrics
+
+
+def evaluate_payload(payload) -> tuple[dict, str]:
+    zero = {
+        "train_coverage": 0.0,
+        "large_instance_coverage": 0.0,
+        "hard_instance_coverage": 0.0,
+        "capacity_shift_coverage": 0.0,
+        "initial_state_shift_coverage": 0.0,
+    }
+    try:
+        features, rules = parse_policy(payload)
+        reason = structural_termination(features, rules)
+        if reason is not None:
+            raise InvalidPolicy(f"not structurally terminating: {reason}")
+    except InvalidPolicy as error:
+        return _failed_metrics(zero), f"invalid policy ({error})"
+
+    policy = CompiledPolicy(features, rules)
+    suites = {
+        "train": TRAIN_INSTANCES,
+        "large": LARGE_INSTANCES,
+        "capacity": CAPACITY_INSTANCES,
+        "initial": INITIAL_STATE_INSTANCES,
+    }
+    results = {name: [analyze_instance(policy, spec) for spec in specs] for name, specs in suites.items()}
+    hard_names = {spec[0] for spec in _hard(LARGE_INSTANCES)}
+    hard_results = [r for spec, r in zip(LARGE_INSTANCES, results["large"]) if spec[0] in hard_names]
+
+    def coverage(rs: list[dict]) -> float:
+        return sum(r["solved"] for r in rs) / len(rs)
+
+    coverages = {
+        "train_coverage": coverage(results["train"]),
+        "large_instance_coverage": coverage(results["large"]),
+        "hard_instance_coverage": coverage(hard_results),
+        "capacity_shift_coverage": coverage(results["capacity"]),
+        "initial_state_shift_coverage": coverage(results["initial"]),
+    }
+    all_results = [r for rs in results.values() for r in rs]
+    failures = {}
+    for r in all_results:
+        if not r["solved"]:
+            failures[r["reason"]] = failures.get(r["reason"], 0) + 1
+    if failures:
+        summary = ", ".join(f"{count} {kind}" for kind, count in sorted(failures.items()))
+        return _failed_metrics(coverages), f"does not solve every instance ({summary})"
+
+    held_out = results["large"] + results["capacity"] + results["initial"]
+    counts = [c for r in held_out for c in r["branching"]]
+    worst = [min(r["worst_ratio"], PLAN_RATIO_CAP) for r in held_out]
+    metrics = {
+        "policy_quality": sum(1.0 / r["expected_ratio"] for r in results["large"]) / len(results["large"]),
+        "max_effective_width": max(r["undefined_fraction"] > 0 for r in results["large"]) * 1.0,
+        "avg_effective_width": max(r["undefined_fraction"] for r in results["large"]),
+        "max_applicable_successors": float(max(counts)),
+        "avg_applicable_successors": sum(counts) / len(counts),
+        "selected_features": min(float(len(features)), FEATURE_CAP),
+        "policy_rules": min(float(len(rules)), RULE_CAP),
+        "max_plan_length_ratio": max(worst),
+        "avg_plan_length_ratio": sum(worst) / len(worst),
+    }
+    metrics.update(coverages)
+    return metrics, "solves every instance"
+
+
+# ---------------------------------------------------------------------------
+# Baselines owned by the evaluator
+# ---------------------------------------------------------------------------
+
+BASELINES = {
+    # Imitates only the first action of the example plans (pick).
+    "one_step_imitation": {
+        "selected_features": ["m_carried", "n_balls_at_a"],
+        "rules": [{"condition": [], "effects": [["m_carried", "up"], ["n_balls_at_a", "down"]]}],
+    },
+    # Projects the five-ball example plan onto the seven named non-distractor
+    # features, without feature selection or rule simplification.
+    "plan_projection": {
+        "selected_features": [
+            "at_a", "goal", "m_carried", "n_balls_at_a", "remaining_work", "room_b", "space_in_gripper",
+        ],
+        "rules": [
+            {
+                "condition": [["at_a", "1"], ["goal", "0"], ["m_carried", "0"], ["n_balls_at_a", "1"],
+                              ["remaining_work", "1"], ["room_b", "0"], ["space_in_gripper", "1"]],
+                "effects": [["m_carried", "up"], ["n_balls_at_a", "down"], ["space_in_gripper", "down"]],
+            },
+            {
+                "condition": [["at_a", "1"], ["goal", "0"], ["m_carried", "1"], ["n_balls_at_a", "1"],
+                              ["remaining_work", "1"], ["room_b", "0"], ["space_in_gripper", "1"]],
+                "effects": [["m_carried", "up"], ["n_balls_at_a", "down"], ["space_in_gripper", "down"]],
+            },
+            {
+                "condition": [["at_a", "1"], ["goal", "0"], ["m_carried", "1"], ["n_balls_at_a", "1"],
+                              ["remaining_work", "1"], ["room_b", "0"], ["space_in_gripper", "0"]],
+                "effects": [["at_a", "false"], ["room_b", "true"]],
+            },
+            {
+                "condition": [["at_a", "0"], ["goal", "0"], ["m_carried", "1"], ["n_balls_at_a", "1"],
+                              ["remaining_work", "1"], ["room_b", "1"], ["space_in_gripper", "0"]],
+                "effects": [["m_carried", "down"], ["remaining_work", "down"], ["space_in_gripper", "up"]],
+            },
+            {
+                "condition": [["at_a", "0"], ["goal", "0"], ["m_carried", "1"], ["n_balls_at_a", "1"],
+                              ["remaining_work", "1"], ["room_b", "1"], ["space_in_gripper", "1"]],
+                "effects": [["m_carried", "down"], ["remaining_work", "down"], ["space_in_gripper", "up"]],
+            },
+            {
+                "condition": [["at_a", "0"], ["goal", "0"], ["m_carried", "0"], ["n_balls_at_a", "1"],
+                              ["remaining_work", "1"], ["room_b", "1"], ["space_in_gripper", "1"]],
+                "effects": [["at_a", "true"], ["room_b", "false"]],
+            },
+            {
+                "condition": [["at_a", "1"], ["goal", "0"], ["m_carried", "1"], ["n_balls_at_a", "0"],
+                              ["remaining_work", "1"], ["room_b", "0"], ["space_in_gripper", "1"]],
+                "effects": [["at_a", "false"], ["room_b", "true"]],
+            },
+            {
+                "condition": [["at_a", "0"], ["goal", "0"], ["m_carried", "1"], ["n_balls_at_a", "0"],
+                              ["remaining_work", "1"], ["room_b", "1"], ["space_in_gripper", "1"]],
+                "effects": [["goal", "true"], ["m_carried", "down"], ["remaining_work", "down"],
+                            ["space_in_gripper", "up"]],
+            },
+        ],
+    },
+    # Admits every legal successor (no features, one unconditional rule).
+    "admit_all_legal": {
+        "selected_features": [],
+        "rules": [{"condition": [], "effects": []}],
+    },
+}
+
+# ---------------------------------------------------------------------------
+# Artifact discovery and output
+# ---------------------------------------------------------------------------
 
 
 def _discover_policy_paths() -> list[Path]:
-    roots = [Path("outputs"), Path("checkpoints"), Path("method_outputs")]
     paths: list[Path] = []
-    for root in roots:
+    for root in (Path("outputs"), Path("checkpoints"), Path("method_outputs")):
         if root.exists():
-            paths.extend(root.glob("**/policy.json"))
+            paths.extend(p for p in root.glob("**/policy.json") if p.is_file())
     return sorted(set(paths))
-
-
-def _method_name(path: Path) -> str:
-    parent = path.parent.name if path.parent.name else path.stem
-    if parent == "genex_gripper":
-        return "genex_wrapper"
-    name = re.sub(r"[^A-Za-z0-9_.-]+", "_", parent).strip("_")
-    return name or "policy"
 
 
 def _named_policy_paths(paths: list[Path]) -> dict[str, Path]:
     named: dict[str, Path] = {}
     for path in paths:
-        base = _method_name(path)
+        base = re.sub(r"[^A-Za-z0-9_.-]+", "_", path.parent.name).strip("_") or "policy"
+        if base in BASELINES:
+            base = f"{base}_submitted"
         name = base
         suffix = 2
         while name in named:
@@ -199,39 +580,34 @@ def _named_policy_paths(paths: list[Path]) -> dict[str, Path]:
     return named
 
 
-def _metrics_for_policy(path: Path) -> dict[str, float]:
-    policy = json.loads(path.read_text())
-    metrics = evaluate_policy(policy)
-    stats = policy.get("stats", {})
-    metrics.update(
-        {
-            "feature_pool": float(stats.get("feature_pool", 0)),
-            "inner_iterations": float(stats.get("inner_iterations", 0)),
-            "outer_iterations": float(stats.get("outer_iterations", 0)),
-            "hit_constraints": float(stats.get("hit_constraints", 0)),
-        }
-    )
-    return metrics
+def _load(path: Path):
+    try:
+        return json.loads(path.read_text())
+    except (OSError, UnicodeDecodeError, ValueError) as error:
+        return {"_unreadable": str(error)}
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--policy", default=None, help="Optional single policy.json artifact to score.")
-    parser.add_argument("--include-baseline", action="store_true")
+    parser.add_argument("--policy", default=None, help="Score a single policy.json instead of every artifact on disk.")
     parser.add_argument("--output", default=OUTPUT)
-    args = parser.parse_args()
+    parser.add_argument("--no-baselines", action="store_true")
+    args = parser.parse_args(argv)
 
     paths = [Path(args.policy)] if args.policy else _discover_policy_paths()
-    named_paths = _named_policy_paths([path for path in paths if path.exists()])
+    named = _named_policy_paths(paths)
+    results: dict = {}
+    if not args.no_baselines:
+        for name, payload in BASELINES.items():
+            metrics, status = evaluate_payload(payload)
+            results[name] = metrics
+            print(f"[{SLICE}] {name}: {status}")
+    for name, path in named.items():
+        metrics, status = evaluate_payload(_load(path))
+        results[name] = metrics
+        print(f"[{SLICE}] {name} ({path}): {status}")
 
-    scores = {"slice": SLICE, "experiments": {EXPERIMENT: {"results": {}}}}
-    results = scores["experiments"][EXPERIMENT]["results"]
-    if args.include_baseline:
-        results["one_step_imitation"] = baseline_metrics()
-
-    for method_name, policy_path in named_paths.items():
-        results[method_name] = _metrics_for_policy(policy_path)
-
+    scores = {"slice": SLICE, "experiments": {EXPERIMENT: {"results": results}}}
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(scores, indent=2, sort_keys=True) + "\n")

@@ -1,0 +1,16 @@
+{
+  "rules": [
+    {
+      "condition": [],
+      "effects": [
+        [
+          "optimal_distance",
+          "down"
+        ]
+      ]
+    }
+  ],
+  "selected_features": [
+    "optimal_distance"
+  ]
+}

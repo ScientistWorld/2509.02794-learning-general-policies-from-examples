@@ -25,6 +25,19 @@ The paper's code-release footnote points to
 `https://github.com/bonetblai/learner-policies-from-examples`, verified on
 2026-05-31 at commit `9991926f7655c4b6c8dc2f0404123639e42056f2`.
 
+## This Reproduction
+
+`method/genex.py` implements GENEX (greedy min-cost hitting set with
+minimum-cost monotonicity chains and an acyclic ordering constraint), the
+projection of good transitions onto the selected features, the optional greedy
+simplification (rules stay stratified and avoid bad transitions), and WRAPPER
+with strategy S1. As in Algorithm 2, line 7, the WRAPPER test explores every
+policy trajectory. When it finds a reachable alive state with no policy
+transition, it adds the planner's transition from that state to X+. When it
+finds a policy transition into a dead end, it adds that transition to X-. The
+domain is a hand-coded abstract Gripper with standard STRIPS dynamics and a
+127-feature named pool, not DLPLAN/TARSKI.
+
 ## Main Claims
 
 The primary claim is that the GENEX plus WRAPPER pipeline can learn terminating,

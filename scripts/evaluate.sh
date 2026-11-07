@@ -1,24 +1,14 @@
 #!/bin/bash
-# Evaluation script — the standard way to evaluate work in this environment.
+# Default evaluation: scores every policy artifact on disk on the visible slice.
 #
-# This script must be SELF-CONTAINED using only code in eval/.
-# Do NOT import from method/ — evaluate.sh must work even when the
-# paper's method code is hidden from a scientist agent.
+# Self-contained in eval/: does not import method/ or data/. A policy artifact is
+# any outputs/**/policy.json, checkpoints/**/policy.json or
+# method_outputs/**/policy.json; the method name is the artifact's directory
+# name. Writes scoring/scores.json (also includes the evaluator-owned baselines).
 #
-# Design it so that anyone following the same output format can run
-# this script to evaluate their results.
-#
-# OUTPUT CONTRACT: This script MUST write scoring/scores.json containing
-# a JSON dict nested by experiment, e.g.:
-#   {"imagenet_classification": {"top1_accuracy": 82.1, "top5_accuracy": 94.8}}
-# Experiment and metric names must match the keys in scoring/reference.json.
-# This file is read by the system for automated comparison.
-#
-# Example usage:
-#   ./evaluate.sh <method_and_run_name>                             # evaluate with defaults
-#   ./evaluate.sh <method_and_run_name> checkpoints/epoch_10.pt     # evaluate a specific checkpoint
-#
-# Called from run.sh after training, or independently.
+# Usage:
+#   bash scripts/evaluate.sh                         # every artifact on disk
+#   bash scripts/evaluate.sh --policy path/to/policy.json
 
 set -e
 
@@ -26,4 +16,4 @@ cd /home/user
 
 mkdir -p scoring
 
-python -m eval.evaluate_gripper --include-baseline "$@"
+python -m eval.evaluate_gripper "$@"
