@@ -17,7 +17,7 @@
         "selected_features": 4.0,
         "train_coverage": 1.0
       },
-      "after_rank": 0.08244310626860048,
+      "after_rank": 0.08244310626860046,
       "after_status": "[test] candidate (outputs/candidate/policy.json): solves every instance",
       "before_metrics": {
         "avg_applicable_successors": 1.0,
@@ -38,7 +38,7 @@
         "selected_features": 4.0,
         "train_coverage": 1.0
       },
-      "before_rank": 0.1841509433962264,
+      "before_rank": 0.18415094339622645,
       "before_source": "pre-hardening evaluator (old_gym), unmodified data",
       "description": "Genuine refinement: depart room A only with a full load or after the last pickup",
       "kind": "better",
@@ -49,7 +49,7 @@
       "after_metrics": {
         "avg_applicable_successors": 1.1903731746890212,
         "avg_effective_width": 0.0,
-        "avg_plan_length_ratio": 1.3765119186807342,
+        "avg_plan_length_ratio": 1.376511918680734,
         "capacity_shift_coverage": 1.0,
         "hard_instance_coverage": 1.0,
         "initial_state_shift_coverage": 1.0,
@@ -199,7 +199,7 @@
         "selected_features": 0.0,
         "train_coverage": 0.0
       },
-      "before_rank": -2.2658490566037734,
+      "before_rank": -2.265849056603773,
       "before_source": "pre-hardening evaluator (old_gym), unmodified data",
       "description": "Zero rules, zero features",
       "kind": "shortcut",
@@ -359,7 +359,7 @@
       "after_metrics": {
         "avg_applicable_successors": 1.1903731746890212,
         "avg_effective_width": 0.0,
-        "avg_plan_length_ratio": 1.3765119186807342,
+        "avg_plan_length_ratio": 1.376511918680734,
         "capacity_shift_coverage": 1.0,
         "hard_instance_coverage": 1.0,
         "initial_state_shift_coverage": 1.0,
@@ -482,7 +482,7 @@
       "after_metrics": {
         "avg_applicable_successors": 1.0,
         "avg_effective_width": 0.0,
-        "avg_plan_length_ratio": 1.3765119186807342,
+        "avg_plan_length_ratio": 1.376511918680734,
         "capacity_shift_coverage": 1.0,
         "hard_instance_coverage": 1.0,
         "initial_state_shift_coverage": 1.0,
@@ -561,7 +561,7 @@
         "selected_features": 3.0,
         "train_coverage": 0.0
       },
-      "before_rank": -2.5658490566037737,
+      "before_rank": -2.5658490566037733,
       "before_source": "pre-hardening evaluator (old_gym), unmodified data",
       "description": "Ablation: pickup rule removed",
       "kind": "weaker",
@@ -572,7 +572,7 @@
       "after_metrics": {
         "avg_applicable_successors": 1.1903731746890212,
         "avg_effective_width": 0.0,
-        "avg_plan_length_ratio": 1.3765119186807342,
+        "avg_plan_length_ratio": 1.376511918680734,
         "capacity_shift_coverage": 1.0,
         "hard_instance_coverage": 1.0,
         "initial_state_shift_coverage": 1.0,
@@ -638,7 +638,7 @@
   "reference_metrics": {
     "avg_applicable_successors": 1.1903731746890212,
     "avg_effective_width": 0.0,
-    "avg_plan_length_ratio": 1.3765119186807342,
+    "avg_plan_length_ratio": 1.376511918680734,
     "capacity_shift_coverage": 1.0,
     "hard_instance_coverage": 1.0,
     "initial_state_shift_coverage": 1.0,
