@@ -16,7 +16,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import product
-from typing import Callable, Iterable
+from typing import Iterable
+
+from data.policy_features import (  # noqa: F401  (re-exported for learners)
+    Feature,
+    Transition,
+    changes_differ,
+    effect,
+    transition_change,
+    valuation,
+)
 
 
 @dataclass(frozen=True)
@@ -46,28 +55,6 @@ class Instance:
 
     def initial(self) -> State:
         return State(self.balls, 0, True, self.balls, self.capacity)
-
-
-@dataclass(frozen=True)
-class Transition:
-    source: State
-    target: State
-    action: str
-
-
-@dataclass(frozen=True)
-class Feature:
-    name: str
-    kind: str
-    complexity: int
-    value_fn: Callable[[State], int | bool]
-
-    def value(self, state: State) -> int | bool:
-        return self.value_fn(state)
-
-    def positive(self, state: State) -> bool:
-        value = self.value(state)
-        return bool(value) if self.kind == "bool" else int(value) > 0
 
 
 def _replace(state: State, **changes) -> State:
@@ -175,43 +162,6 @@ def feature_pool(extra_distractors: int = 80) -> list[Feature]:
 def training_instances() -> list[Instance]:
     """The five small learning instances (1 to 5 balls, two grippers)."""
     return [Instance(f"train_{n}", n) for n in range(1, 6)]
-
-
-def transition_change(feature: Feature, transition: Transition) -> str:
-    before = feature.value(transition.source)
-    after = feature.value(transition.target)
-    if feature.kind == "bool":
-        if bool(before) == bool(after):
-            return "="
-        return "up" if bool(after) else "down"
-    if int(after) > int(before):
-        return "up"
-    if int(after) < int(before):
-        return "down"
-    return "="
-
-
-def changes_differ(feature: Feature, a: Transition, b: Transition) -> bool:
-    if feature.positive(a.source) != feature.positive(b.source):
-        return True
-    return transition_change(feature, a) != transition_change(feature, b)
-
-
-def valuation(feature: Feature, state: State) -> str:
-    return "1" if feature.positive(state) else "0"
-
-
-def effect(feature: Feature, transition: Transition) -> str:
-    change = transition_change(feature, transition)
-    if feature.kind == "bool":
-        if change == "up":
-            return "true"
-        if change == "down":
-            return "false"
-        return "same"
-    if change == "=":
-        return "same"
-    return change
 
 
 def alive_states(instance: Instance) -> Iterable[State]:

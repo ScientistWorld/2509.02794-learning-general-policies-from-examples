@@ -1,5 +1,57 @@
 {
   "experiments": {
+    "childsnack_generalization": {
+      "results": {
+        "admit_all_legal": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.0
+        },
+        "genex_wrapper": {
+          "avg_effective_width": 0.052464471444046284,
+          "heldout_coverage": 0.5277777777777778,
+          "initial_state_shift_coverage": 0.16666666666666666,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.5027765292879569,
+          "policy_rules": 15.0,
+          "resource_shift_coverage": 0.4166666666666667,
+          "selected_features": 12.0,
+          "size_coverage": 1.0,
+          "train_coverage": 1.0
+        },
+        "one_step_imitation": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.0
+        },
+        "plan_projection": {
+          "avg_effective_width": 1.0,
+          "heldout_coverage": 0.0,
+          "initial_state_shift_coverage": 0.0,
+          "max_effective_width": 1.0,
+          "policy_quality": 0.0,
+          "policy_rules": 40.0,
+          "resource_shift_coverage": 0.0,
+          "selected_features": 20.0,
+          "size_coverage": 0.0,
+          "train_coverage": 0.1
+        }
+      }
+    },
     "gripper_generalization": {
       "results": {
         "admit_all_legal": {
@@ -21,7 +73,7 @@
         "genex_wrapper": {
           "avg_applicable_successors": 1.1903731746890212,
           "avg_effective_width": 0.0,
-          "avg_plan_length_ratio": 1.376511918680734,
+          "avg_plan_length_ratio": 1.3765119186807342,
           "capacity_shift_coverage": 1.0,
           "hard_instance_coverage": 1.0,
           "initial_state_shift_coverage": 1.0,

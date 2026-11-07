@@ -23,15 +23,9 @@ Semantics (Bonet & Geffner, "Learning General Policies From Examples"):
 """
 from __future__ import annotations
 
-import argparse
-import json
-import re
 from collections import deque
 from itertools import combinations, product
-from pathlib import Path
 
-SLICE = "test"
-OUTPUT = "scoring/scores_test.json"
 EXPERIMENT = "gripper_generalization"
 
 # ---------------------------------------------------------------------------
@@ -180,7 +174,8 @@ def _parse_pairs(items, selected: set, what: str, rule_index: int) -> list:
     return pairs
 
 
-def parse_policy(payload) -> tuple[list[str], list[tuple[dict, dict]]]:
+def parse_policy(payload, pool: dict | None = None) -> tuple[list[str], list[tuple[dict, dict]]]:
+    pool = POOL if pool is None else pool
     if not isinstance(payload, dict):
         raise InvalidPolicy("policy artifact must be a JSON object")
     features = payload.get("selected_features")
@@ -191,7 +186,7 @@ def parse_policy(payload) -> tuple[list[str], list[tuple[dict, dict]]]:
         raise InvalidPolicy("selected_features contains duplicates")
     if len(features) > MAX_SELECTED_FEATURES:
         raise InvalidPolicy(f"more than {MAX_SELECTED_FEATURES} selected features")
-    unknown = [name for name in features if name not in POOL]
+    unknown = [name for name in features if name not in pool]
     if unknown:
         raise InvalidPolicy(f"unknown feature names: {unknown[:5]}")
     if not isinstance(rules, list) or not rules:
@@ -209,7 +204,7 @@ def parse_policy(payload) -> tuple[list[str], list[tuple[dict, dict]]]:
         }
         effects = {}
         for name, value in _parse_pairs(rule.get("effects"), selected, "effects", index):
-            kind = POOL[name][0]
+            kind = pool[name][0]
             if not isinstance(value, str) or value not in EFFECTS[kind]:
                 raise InvalidPolicy(f"rule {index}: effect {value!r} invalid for {kind} feature {name!r}")
             effects[name] = value
@@ -294,10 +289,11 @@ def structural_termination(features: list[str], rules: list[tuple[dict, dict]], 
 
 
 class CompiledPolicy:
-    def __init__(self, features: list[str], rules: list[tuple[dict, dict]]):
+    def __init__(self, features: list[str], rules: list[tuple[dict, dict]], pool: dict | None = None):
+        pool = POOL if pool is None else pool
         self.features = features
-        self.kinds = [POOL[f][0] for f in features]
-        self.functions = [POOL[f][1] for f in features]
+        self.kinds = [pool[f][0] for f in features]
+        self.functions = [pool[f][1] for f in features]
         index = {f: i for i, f in enumerate(features)}
         self.rules = [
             (
@@ -551,68 +547,3 @@ BASELINES = {
         "rules": [{"condition": [], "effects": []}],
     },
 }
-
-# ---------------------------------------------------------------------------
-# Artifact discovery and output
-# ---------------------------------------------------------------------------
-
-
-def _discover_policy_paths() -> list[Path]:
-    paths: list[Path] = []
-    for root in (Path("outputs"), Path("checkpoints"), Path("method_outputs")):
-        if root.exists():
-            paths.extend(p for p in root.glob("**/policy.json") if p.is_file())
-    return sorted(set(paths))
-
-
-def _named_policy_paths(paths: list[Path]) -> dict[str, Path]:
-    named: dict[str, Path] = {}
-    for path in paths:
-        base = re.sub(r"[^A-Za-z0-9_.-]+", "_", path.parent.name).strip("_") or "policy"
-        if base in BASELINES:
-            base = f"{base}_submitted"
-        name = base
-        suffix = 2
-        while name in named:
-            name = f"{base}_{suffix}"
-            suffix += 1
-        named[name] = path
-    return named
-
-
-def _load(path: Path):
-    try:
-        return json.loads(path.read_text())
-    except (OSError, UnicodeDecodeError, ValueError) as error:
-        return {"_unreadable": str(error)}
-
-
-def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--policy", default=None, help="Score a single policy.json instead of every artifact on disk.")
-    parser.add_argument("--output", default=OUTPUT)
-    parser.add_argument("--no-baselines", action="store_true")
-    args = parser.parse_args(argv)
-
-    paths = [Path(args.policy)] if args.policy else _discover_policy_paths()
-    named = _named_policy_paths(paths)
-    results: dict = {}
-    if not args.no_baselines:
-        for name, payload in BASELINES.items():
-            metrics, status = evaluate_payload(payload)
-            results[name] = metrics
-            print(f"[{SLICE}] {name}: {status}")
-    for name, path in named.items():
-        metrics, status = evaluate_payload(_load(path))
-        results[name] = metrics
-        print(f"[{SLICE}] {name} ({path}): {status}")
-
-    scores = {"slice": SLICE, "experiments": {EXPERIMENT: {"results": results}}}
-    output = Path(args.output)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(scores, indent=2, sort_keys=True) + "\n")
-    print(json.dumps(scores, indent=2, sort_keys=True))
-
-
-if __name__ == "__main__":
-    main()

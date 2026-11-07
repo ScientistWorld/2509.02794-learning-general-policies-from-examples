@@ -1,7 +1,9 @@
 #!/bin/bash
 # Run the paper's proposed method (GENEX + WRAPPER) and score it.
 #
-# Writes outputs/genex_wrapper/policy.json, then runs the default evaluation.
+# Writes outputs/genex_wrapper/policy.json (Gripper) and
+# outputs/genex_wrapper/childsnack_policy.json (Childsnack), then runs the
+# default evaluation on the visible slice.
 #
 # Usage:
 #   bash scripts/method.sh

@@ -12,4 +12,4 @@ cd /home/user
 
 mkdir -p scoring
 
-python -m eval.test.evaluate_gripper "$@"
+python -m eval.test.evaluate "$@"

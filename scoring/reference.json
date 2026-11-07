@@ -1,9 +1,9 @@
 {
   "experiments": {
     "gripper_generalization": {
-      "description": "Gripper domain policy learning and larger-instance generalization. Paper reports Gripper in Table 1 and large-instance coverage/effective width in Table 3.",
+      "description": "Gripper domain policy learning and larger-instance generalization (the paper's reproduced core claim). Paper reports Gripper in Table 1 and large-instance coverage/effective width in Table 3.",
       "notes": "Paper-reported values (Tables 1 and 3, Gripper row): large_instance_coverage 100%, effective width 0 (max and avg), 3 selected features, 4 rules, 6,154-feature pool, 1 outer and 1 inner WRAPPER iteration, |H| = 38; train_coverage 1.0 because WRAPPER only returns policies that solve the training set. policy_quality = 1.0 is NOT a number the paper reports: it is the gym's ideal anchor (every large instance solved and every policy trajectory as short as an optimal plan). The paper's own 4-rule Gripper policy also admits trajectories that leave room A with a single ball, so its faithful reproduction scores below this anchor. Scaled setup: hand-coded abstract Gripper with standard STRIPS dynamics (move always legal, pick/drop in either room), a 127-feature named pool instead of the 6,154-feature DLPLAN pool, and evaluator-generated held-out suites (larger sizes, unseen capacities, unseen initial states). Coverage follows the paper's definition of solving: every maximal policy trajectory must be finite and end in a goal state; policies must be structurally terminating (k-stratified, k <= 2) or the run is scored as failed. hard/capacity/initial-state coverage, plan-length ratios and successor counts are gym-derived and have no paper value. feature_pool, inner_iterations, outer_iterations and hit_constraints are paper diagnostics only: the evaluator never reads method-reported numbers, so they are not scored.",
-      "weight": 1.0,
+      "weight": 0.5,
       "primary_metric": "policy_quality",
       "metrics": {
         "policy_quality": {
@@ -111,6 +111,108 @@
           "inner_iterations": 1.0,
           "outer_iterations": 1.0,
           "hit_constraints": 38.0
+        },
+        "one_step_imitation": {
+          "type": "baseline"
+        },
+        "plan_projection": {
+          "type": "baseline"
+        },
+        "admit_all_legal": {
+          "type": "baseline"
+        }
+      }
+    },
+    "childsnack_generalization": {
+      "description": "Childsnack policy learning and generalization: the domain where the paper's learned policy falls short (Table 3: 41.7% coverage, effective width up to 1). Learn from the paper's ten 3-children training instances; test on held-out instances that are larger, have surplus resources, or start from a different situation.",
+      "notes": "Paper-reported values: Table 3 Childsnack row (120 test instances, 41.7% coverage, max/avg effective width 1.00/0.20) and Table 1 Childsnack row (|Q| = 10, 2,900-feature pool, strategy S1, 1 outer and 2 inner iterations, |H| = 30, |G| = 6 features, |pi| = 8 rules). train_coverage 1.0 because WRAPPER only returns policies that solve the training set. Scaled setup: hand-coded abstract Childsnack (one tray, three tables, standard IPC 2014 dynamics, dead ends when gluten-free food is wasted), a 148-feature named pool instead of the DLPLAN pool, an optimal example planner instead of SIW, and evaluator-owned held-out suites of 12 instances each: size (4-9 children, the paper's generator with constant factor 1.0), resource (surplus ingredients or sandwich objects, i.e. constant factor > 1), initial (sandwiches already made or on the tray, tray starting at a table). The paper's test set is 1-4 children with constant factor 1.0 only, so heldout_coverage is the same quantity on a different, scaled suite, not a reproduction of 41.7%. In this abstraction WRAPPER's strategy S1 fails and it switches to S2 (as in the paper's protocol). Coverage follows the paper's definition of solving (every maximal policy trajectory reaches a goal); a policy that is not structurally terminating (k-stratified, k <= 2) or does not solve its ten learning instances is scored as failed on every non-coverage metric.",
+      "weight": 0.5,
+      "primary_metric": "heldout_coverage",
+      "metrics": {
+        "heldout_coverage": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Fraction of the 36 held-out instances (size, resource and initial suites) the policy solves."
+        },
+        "size_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on 12 standard instances with 4-9 children (larger than the learning instances)."
+        },
+        "resource_shift_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on 12 instances with surplus bread, content or sandwich objects."
+        },
+        "initial_state_shift_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on 12 instances that start with sandwiches already made or on the tray, or with the tray at a table."
+        },
+        "train_coverage": {
+          "higher_is_better": true,
+          "coefficient": 0.3,
+          "description": "Coverage on the ten learning instances; below 1 the run counts as failed on every non-coverage metric."
+        },
+        "policy_quality": {
+          "higher_is_better": true,
+          "coefficient": 0.5,
+          "description": "Mean over held-out instances of optimal plan length divided by the expected trajectory length when an executor picks uniformly among admitted successors (0 for an unsolved instance)."
+        },
+        "max_effective_width": {
+          "higher_is_better": false,
+          "coefficient": -0.1,
+          "description": "1 if on some held-out instance the policy reaches a non-goal state that is not a dead end where it admits no successor (search would be needed), else 0."
+        },
+        "avg_effective_width": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Mean over held-out instances of the fraction of reachable non-goal, non-dead-end policy states where the policy admits no successor."
+        },
+        "selected_features": {
+          "higher_is_better": false,
+          "coefficient": -0.01,
+          "description": "Number of selected features (capped at 20; pinned to 20 when the run fails)."
+        },
+        "policy_rules": {
+          "higher_is_better": false,
+          "coefficient": -0.005,
+          "description": "Number of rules (capped at 40; pinned to 40 when the run fails)."
+        },
+        "feature_pool": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (size of the candidate feature pool). Not computed or scored by the evaluator."
+        },
+        "inner_iterations": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (WRAPPER inner-loop iterations). Not computed or scored by the evaluator."
+        },
+        "outer_iterations": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (WRAPPER outer-loop iterations). Not computed or scored by the evaluator."
+        },
+        "hit_constraints": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Paper diagnostic (size of the hitting-set problem). Not computed or scored by the evaluator."
+        }
+      },
+      "results": {
+        "genex_wrapper": {
+          "type": "proposed",
+          "heldout_coverage": 0.417,
+          "train_coverage": 1.0,
+          "max_effective_width": 1.0,
+          "avg_effective_width": 0.2,
+          "selected_features": 6.0,
+          "policy_rules": 8.0,
+          "feature_pool": 2900.0,
+          "inner_iterations": 2.0,
+          "outer_iterations": 1.0,
+          "hit_constraints": 30.0
         },
         "one_step_imitation": {
           "type": "baseline"

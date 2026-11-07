@@ -22,3 +22,7 @@ training set.
   three selected features, four rules, and 100% large-instance coverage.
 - Many learned policies retain effective width 0 on larger instances, meaning
   they act as direct policies rather than sketches needing additional search.
+- The learned policies do not always generalize: the paper's Childsnack policy
+  solves only 41.7% of its test instances (Table 3). This gym scores both a
+  Gripper experiment (the reproduced core claim) and a Childsnack experiment
+  (where the method falls short), with weight 0.5 each.
