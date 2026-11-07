@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import shutil
 import sys
+from collections import deque
 from pathlib import Path
 
 from data import childsnack, gripper
@@ -82,17 +83,6 @@ def gripper_weaker_lazy_one_ball(out: Path, ref: Path) -> None:
 # ---------------------------------------------------------------------------
 
 
-class _Start:
-    """An instance whose initial state is a given state."""
-
-    def __init__(self, name: str, state):
-        self.name = name
-        self._state = state
-
-    def initial(self):
-        return self._state
-
-
 def childsnack_better_all_states(out: Path, ref: Path) -> None:
     """Learned: WRAPPER whose test on Q' and Q starts from every reachable alive state.
 
@@ -104,6 +94,57 @@ def childsnack_better_all_states(out: Path, ref: Path) -> None:
     ten training instances are used.
     """
     original = G.verify_policy
+    alive_by_instance: dict[str, list] = {}
+
+    def _alive_states(instance) -> list:
+        if instance.name not in alive_by_instance:
+            alive_by_instance[instance.name] = sorted(
+                (s for s in childsnack.all_states(instance) if not s.is_goal() and not childsnack.is_dead_end(s)),
+                key=lambda s: s.key(),
+            )
+        return alive_by_instance[instance.name]
+
+    def _verify_from(policy, starts, domain) -> dict:
+        """One multi-source exploration of the policy graph from every start state.
+
+        Equivalent to verifying from each start separately (closed and safe on
+        the union of reachable states; the union graph is acyclic iff every
+        per-start subgraph is), but linear rather than quadratic in the number
+        of states.
+        """
+        states = {s.key(): s for s in starts}
+        frontier = deque(states.values())
+        graph: dict[tuple, list[tuple]] = {}
+        while frontier:
+            state = frontier.popleft()
+            if state.is_goal():
+                graph[state.key()] = []
+                continue
+            candidates = G.policy_successors(policy, state, domain)
+            if not candidates:
+                return {"solved": False, "reason": "undefined", "state": state}
+            graph[state.key()] = []
+            for transition in candidates:
+                target = transition.target
+                if not target.is_goal() and G._is_dead_end(target, domain):
+                    return {"solved": False, "reason": "dead_end", "transition": transition}
+                graph[state.key()].append(target.key())
+                if target.key() not in states:
+                    states[target.key()] = target
+                    frontier.append(target)
+        indegree = {key: 0 for key in graph}
+        for succ in graph.values():
+            for key in succ:
+                indegree[key] += 1
+        order = [key for key, degree in indegree.items() if degree == 0]
+        for key in order:
+            for nxt in graph[key]:
+                indegree[nxt] -= 1
+                if indegree[nxt] == 0:
+                    order.append(nxt)
+        if len(order) != len(graph):
+            return {"solved": False, "reason": "cycle"}
+        return {"solved": True, "reason": "goal", "states": len(graph)}
 
     def verify_from_all_states(policy, instance, domain=G.gripper_domain):
         if domain is not childsnack:
@@ -111,13 +152,7 @@ def childsnack_better_all_states(out: Path, ref: Path) -> None:
         result = original(policy, instance, domain)
         if not result["solved"]:
             return result
-        for state in sorted(childsnack.all_states(instance), key=lambda s: s.key()):
-            if state.is_goal() or childsnack.is_dead_end(state):
-                continue
-            result = original(policy, _Start(instance.name, state), domain)
-            if not result["solved"]:
-                return result
-        return {"solved": True, "reason": "goal"}
+        return _verify_from(policy, _alive_states(instance), domain)
 
     G.verify_policy = verify_from_all_states
     try:

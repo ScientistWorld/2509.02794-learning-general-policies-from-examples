@@ -30,12 +30,20 @@ CASES_DIR = HERE / "cases"
 SCORES_TEST = ROOT / "scoring" / "scores_test.json"
 
 
-def _run(cmd: list[str], env: dict | None = None, log: Path | None = None) -> int:
+BUILD_TIMEOUT_S = 2400  # a learner that exceeds this is recorded as failed (no artifact)
+BUILD_STATUS: dict[str, object] = {}
+
+
+def _run(cmd: list[str], env: dict | None = None, log: Path | None = None, timeout: float | None = None) -> int:
     start = time.time()
     with open(log, "w") if log else open(os.devnull, "w") as handle:
-        proc = subprocess.run(cmd, cwd=ROOT, env=env, stdout=handle, stderr=subprocess.STDOUT)
-    print(f"  {' '.join(cmd)} -> rc={proc.returncode} ({time.time() - start:.1f}s)", flush=True)
-    return proc.returncode
+        try:
+            rc = subprocess.run(cmd, cwd=ROOT, env=env, stdout=handle, stderr=subprocess.STDOUT, timeout=timeout).returncode
+        except subprocess.TimeoutExpired:
+            handle.write(f"\n[harness] timed out after {timeout}s\n")
+            rc = "timeout"
+    print(f"  {' '.join(cmd)} -> rc={rc} ({time.time() - start:.1f}s)", flush=True)
+    return rc
 
 
 def build(case: str, ref_dir: Path | None, seed: int = 0) -> Path:
@@ -47,9 +55,10 @@ def build(case: str, ref_dir: Path | None, seed: int = 0) -> Path:
     if ref_dir is not None:
         args.append(str(ref_dir))
     (CASES_DIR / case).mkdir(parents=True, exist_ok=True)
-    rc = _run(args, env=env, log=CASES_DIR / case / "method.log")
+    rc = _run(args, env=env, log=CASES_DIR / case / "method.log", timeout=BUILD_TIMEOUT_S)
     if rc != 0:
         out.mkdir(parents=True, exist_ok=True)
+    BUILD_STATUS[case] = rc
     return out
 
 
@@ -127,6 +136,7 @@ def main() -> None:
         "reference_seeds_identical": seeds[0] == seeds[1] == seeds[2],
         "reference_weighted_by_seed": {s: results[f"reference@{s}"]["weighted"]["total"] for s in (0, 1, 2)},
         "cases": results,
+        "build_returncodes": BUILD_STATUS,
     }
     (HERE / "results.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(f"{'case':42s} {'gripper':>10s} {'childsnack':>11s} {'rank':>10s}")
