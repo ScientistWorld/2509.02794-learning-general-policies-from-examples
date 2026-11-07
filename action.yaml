@@ -1,8 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: core_claim
-notes: "CPU job: full run.sh (baselines, GENEX+WRAPPER on Gripper and Childsnack, hardening_v3 audit, scores, validate). Audit now includes two learned Childsnack variants that enlarge Q with training-reachable states (aug_made_k2, greedy_closure) to test whether a genuine Childsnack improvement ranks above the reference."
+notes: "Iteration 12 hardening complete (job 93d0d57e-ed2, validate.py passed). Added childsnack_generalization (paper's under-performing domain; reference 19/36 held-out). Audit: learned Childsnack improvements +0.0525/+0.0282, weaker variants and all shortcuts below reference, Gripper ordering preserved, seed spread 0. Open: hand-written Gripper policy ties the learned refinement (provenance, grader-enforced). See HARDENING.md."
